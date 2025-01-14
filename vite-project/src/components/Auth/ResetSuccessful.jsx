@@ -1,11 +1,28 @@
+import { useEffect, useState } from 'react';
+
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
+
+import { openModal } from '../../Redux/Slice/ModalSlice';
 
 const ResetSuccessful = ({ show }) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const [timer, setTimer] = useState(10);
 
   const handleSignIn = () => {
-    navigate('/', { replace: true })
-  }
+    dispatch(openModal(""))
+    navigate('/login', { replace: true })
+  };
+
+  useEffect(() => {
+    if (timer > 0) {
+      const countdown = setTimeout(() => setTimer(timer - 1), 1000);
+      return () => clearTimeout(countdown); // Cleanup timeout
+    } else if (timer === 0) {
+      handleSignIn();
+    }
+  }, [timer]);
 
   return (
     <>
@@ -20,7 +37,7 @@ const ResetSuccessful = ({ show }) => {
               <div className="">
                 <p className="text-lg text-gray-700 mb-4">Password Reset Successful</p>
                 <p>You will be redirected to the sign-in page in 10 seconds.</p>
-                <p>00 : 10</p>
+                <p className='pb-2 text-custom-green'>00 : {timer}</p>
                 <button onClick={handleSignIn} className="w-24 py-3 bg-custom-green text-white">
                   Sign In
                 </button>
