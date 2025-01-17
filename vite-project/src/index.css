@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-primary {
+  @apply border border-custom-green text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer;
+}
+
+.btn-secondary {
+  @apply border border-custom-green text-black py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer;
+}
+
+.btn-ternary{
+  @apply text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 bg-custom-green cursor-pointer;
+
+}
+
+.active {
+  background-color: rgb(60 202 98);
+  color: white;
+}
+
+.btn-active {
+  width: 60px;
+  height: 23px;
+  top: 213px;
+  left: 996px;
+  padding: 4px 12px 4px 12px;
+  border-radius: 22px;
+  border: 1px;
+  opacity: 0px;
+  color: #38C776;
+  background: #E1FFEE;
+  border: 1px solid #38C776;
+}
+.btn-Inactive {
+  width: 69px;
+  height: 23px;
+  top: 273px;
+  left: 996px;
+  padding: 4px 12px 4px 12px;
+  border-radius: 22px;
+  border: 1px;
+  opacity: 0px;
+  color: #101F31;
+  background: #E7F1FE;
+  border: 1px solid #101F31;
+}
+.btn-draft {
+  width: 53px;
+  height: 23px;
+  top: 453px;
+  left: 996px;
+  padding: 4px 12px 4px 12px;
+  border-radius: 22px;
+  border: 1px;
+  opacity: 0px;
+  color: #FF8A00;
+  background: #FFF6D4;
+  border: 1px solid #FF8A00;
+}
+
+/* td{
+  text-align: center;
+} */
