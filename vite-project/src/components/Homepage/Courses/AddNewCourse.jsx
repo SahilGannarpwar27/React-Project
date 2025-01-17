@@ -1,10 +1,24 @@
+import { useState } from 'react'
+
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
+
 import InputFieldSecondary from '../../../common/InputFieldSecondary'
-import ModuleInfo from './ModuleInfo'
-import Lessons from './Lessons'
-import LessonInfo from './LessonInfo'
+import ModuleInfo from './Module/ModuleInfo'
+import Lessons from './Lessons/Lessons'
+import LessonInfo from './Lessons/LessonInfo'
+import { addCourse, setCurrentCourse } from '../../../Redux/Slice/CoursesSlice'
+import TestInfo from './Lessons/TestInfo'
+import NewModal from './Module/NewModal'
 
 const AddNewCourse = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const showModal = useSelector((state) => state.courses.showModal);
+  const [show, setShow] = useState(false)
+  // const [newCourseName, setNewCourseName] = useState('')
   const {
     register,
     handleSubmit,
@@ -12,21 +26,46 @@ const AddNewCourse = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  //   const title = watch('title')
-  //   const status = watch('status')
-  const mandatory = watch('mandatory')
+  const course_title = watch('title')
+  const is_mandatory = watch('mandatory')
+  const status = watch('status')
+  const category = watch('category')
+  // console.log(title)
+  // console.log(status)
+  // console.log(mandatory)
+  const handleSaveCourse = () => {
+    if (course_title === '' || is_mandatory === '' || status === '') {
+      console.log('Each field is required!!!!!')
+    } else {
+      const newCourse = {
+        course_id: uuidv4(),
+          course_title: course_title,
+          is_mandatory: is_mandatory,
+          status: status,
+          category: category,
+          assignee: 0,
+          duration: '0 min',
 
-  //   console.log(title)
-  //   console.log(status)
-  console.log(mandatory)
+      }
+      dispatch(addCourse(newCourse))
+      // dispatch(setCurrentCourse(newCourse))
+      setShow(true)
+    }
+  }
+
+  const handleBack = () => {
+    navigate('/courses', { replace: false })
+  }
 
   return (
     <div className="pt-2">
       <div className="flex flex-1 justify-between items-center">
         <h1 className="text-xl font-bold mb-4">Add New</h1>
         <div>
-          <button className="btn-secondary">Back</button>
-          <button className="btn-primary bg-custom-green text-">Publish</button>
+          <button onClick={handleBack} className="btn-secondary">
+            Back
+          </button>
+          <button className="btn-ternary">Publish</button>
         </div>
       </div>
       {/* Course Details Section */}
@@ -40,12 +79,6 @@ const AddNewCourse = () => {
         </div>
         <form>
           <div className="flex items-start space-x-4">
-            {/* <div className="w-1/3">
-              <label htmlFor="Title" className="block text-sm font-medium text-gray-700">
-                Title
-              </label>
-              <input type="text" id="Title" className="mt-1 p-2 w-full border border-gray-300 rounded-sm bg-white" />
-            </div> */}
             <InputFieldSecondary
               className="w-1/3"
               htmlFor="Title"
@@ -54,17 +87,6 @@ const AddNewCourse = () => {
               id="Title"
               register={register('title')}
             />
-            {/* <div className="w-1/3">
-              <label htmlFor="Category" className="block text-sm font-medium text-gray-700">
-                Category
-              </label>
-              <select id="Category" className="mt-1 p-2 w-full border border-gray-300 rounded-sm bg-white">
-                <option value=""></option>
-                <option value="Training">Training</option>
-                <option value="Compliance">Compliance</option>
-                <option value="Learning">Learning</option>
-              </select>
-            </div> */}
             <InputFieldSecondary
               className="w-1/3"
               htmlFor="Category"
@@ -74,20 +96,10 @@ const AddNewCourse = () => {
               register={register('category')}
             >
               <option value=""></option>
-              <option value="Training">Training</option>
+              <option value="Training">Trainings</option>
               <option value="Compliance">Compliance</option>
               <option value="Learning">Learning</option>
             </InputFieldSecondary>
-            {/* <div className="w-1/3">
-              <label htmlFor="Status" className="block text-sm font-medium text-gray-700">
-                Status
-              </label>
-              <select id="Status" className="mt-1 p-2 w-full border border-gray-300 rounded-sm bg-white">
-                <option value=""></option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div> */}
             <InputFieldSecondary
               className="w-1/3"
               htmlFor="Status"
@@ -97,30 +109,46 @@ const AddNewCourse = () => {
               register={register('status')}
             >
               <option value=""></option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
+              <option value="Active">Draft</option>
+              <option value="Active" disabled>
+                Active
+              </option>
+              <option value="Inactive" disabled>
+                Inactive
+              </option>
             </InputFieldSecondary>
           </div>
         </form>
         <div className="flex justify-end mt-4">
-          <button className="btn-primary bg-custom-green">Save</button>
+          <button onClick={handleSubmit(handleSaveCourse)} className="btn-ternary">
+            Save
+          </button>
         </div>
       </div>
 
       {/* Third Div */}
+      {show && (
+        <div className="bg-white p-4 mt-2">
+          {/* Module Info Section */}
 
-      <div className="bg-white p-4 mt-2 ">
-        {/* Module Info Section */}
+          <ModuleInfo/>
+          <div className="flex flex-1 pt-4">
+            {/* aside section */}
+            {/* Lesson Info Section */}
+            <Lessons />
 
-        <ModuleInfo />
-        <div className="flex flex-1 pt-4">
-          {/* aside section */}
-          {/* Lesson Info Section */}
-          <Lessons />
-
-          <LessonInfo />
+            <LessonInfo />
+            {/* <TestInfo /> */}
+          </div>
+          <div className="flex justify-end mt-4">
+            <button onClick={handleSubmit(handleSaveCourse)} className="btn-ternary">
+              Save
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+
+      {showModal && <NewModal />}
     </div>
   )
 }

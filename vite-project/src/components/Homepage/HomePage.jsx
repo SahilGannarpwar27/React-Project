@@ -5,11 +5,11 @@ import Sidebar from './Sidebar'
 import { useEffect } from 'react'
 
 const HomePage = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
-  useEffect(() => {
-    navigate('/homepage/dashboard')
-  }, [])
+  // useEffect(() => {
+  //   navigate('/homepage/dashboard')
+  // }, [])
 
   return (
     <div className="flex flex-col h-screen">

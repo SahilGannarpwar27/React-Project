@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router'
 
 const Courses = () => {
-  const courses = useSelector((state) => state.courses)
+  const courses = useSelector((state) => state.courses.courses)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [copyCourses, setCopyCourses] = useState(courses)
   const [selectedStatus, setSelectedstatus] = useState('')
 
@@ -20,11 +20,10 @@ const Courses = () => {
       setCopyCourses(courses)
     }
   }
-  console.log(copyCourses)
+  console.log(copyCourses.length)
 
   const handleAddNew = () => {
-    navigate('/homepage/courses/add-new-course' , {replace : false})
-    
+    navigate('/courses/add-new-course', { replace: false })
   }
 
   return (
@@ -72,46 +71,65 @@ const Courses = () => {
       </div>
 
       {/* Table of Courses */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse mt-4 bg-white">
-          <thead>
-            <tr className="text-left">
-              <th className="border-b p-2">Title</th>
-              <th className="flex border-b p-2">
-                <span className="pr-1">Mandatory</span>
-                <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
-              </th>
-              <th className="border-b p-2">Category</th>
-              <th className="flex border-b p-2">
-                <span className="pr-1">No of assignee</span>
-                <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
-              </th>
-              <th className="border-b p-2">
-                <span>Course duration</span>
-                <img className="pt-1 float-right" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
-              </th>
-              <th className="border-b p-2">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {copyCourses.map((course, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="border-b p-2 truncate">{course.course_title}</td>
-                <td className="border-b p-2 truncate">{course.is_mandatory ? 'Yes' : 'No'}</td>
-                <td className="border-b p-2 truncate">{course.category}</td>
-                <td className="border-b p-2 truncate">{course.assignee}</td>
-                <td className="border-b p-2 truncate">{course.duration}</td>
-                <td className="border-b p-4 truncate">
-                  <span className={course.status === "Draft" ? "btn-draft" : course.status === 'Active' ? "btn-active" : "btn-Inactive"} >
-                    {course.status}
-                  </span>
-                </td>
-                {/* className="text-green-400 border border-green-600 rounded-3xl pl-2 pr-2 bg-green-200" */}
+      {copyCourses.length === 0 ? (
+        <div className="bg-white p-4 rounded shadow-md flex flex-col items-center space-y-4">
+          <h1>Table is Empty</h1>
+          <h2>Add Courses</h2>
+          <button onClick={handleAddNew} className="btn-secondary">
+            Add new
+          </button>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto border-collapse mt-4 bg-white">
+            <thead>
+              <tr className="text-left">
+                <th className="border-b p-2">Title</th>
+                <th className="flex border-b p-2">
+                  <span className="pr-1">Mandatory</span>
+                  <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                </th>
+                <th className="border-b p-2">Category</th>
+                <th className="flex border-b p-2">
+                  <span className="pr-1">No of assignee</span>
+                  <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                </th>
+                <th className="border-b p-2">
+                  <span>Course duration</span>
+                  <img className="pt-1 float-right" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                </th>
+                <th className="border-b p-2">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {copyCourses.map((course, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="border-b p-2 truncate">{course.course_title}</td>
+                  <td className="border-b p-2 truncate">{course.is_mandatory ? 'Yes' : 'No'}</td>
+                  <td className="border-b p-2 truncate">{course.category}</td>
+                  <td className="border-b p-2 truncate">{course.assignee}</td>
+                  <td className="border-b p-2 truncate">{course.duration}</td>
+                  <td className="border-b p-4 truncate">
+                    <span
+                      className={
+                        course.status === 'Draft'
+                          ? 'btn-draft'
+                          : course.status === 'Active'
+                            ? 'btn-active'
+                            : 'btn-Inactive'
+                      }
+                    >
+                      {course.status}
+                    </span>
+                  </td>
+                  {/* className="text-green-400 border border-green-600 rounded-3xl pl-2 pr-2 bg-green-200" */}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       <Outlet />
     </div>
   )

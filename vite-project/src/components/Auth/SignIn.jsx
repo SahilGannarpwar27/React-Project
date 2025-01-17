@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect} from 'react'
 
 import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
@@ -12,6 +12,8 @@ import Background from '../../common/Background';
 import { checkCredentials } from '../../Redux/Slice/SignInSlice'
 import { openModal } from '../../Redux/Slice/ModalSlice'
 import { setFalse } from '../../Redux/Slice/SignInSlice'
+import './SignIn.css'
+
 
 
 const SignIn = () => {
@@ -49,9 +51,9 @@ const SignIn = () => {
 
   // Navigate to homepage if authenticated
   useEffect(() => {
-    if (userState.isAuthenticated) {
+    if (userState?.isAuthenticated) {
       toast.success('Signed In Successfully')
-      navigate('/homepage', { replace: true })
+      navigate('/dashboard', { replace: true })
     }
     dispatch(openModal(''))
   }, [userState.isAuthenticated, navigate])
@@ -60,7 +62,7 @@ const SignIn = () => {
     <>
       <Background>
       <div className="w-full max-w-md p-8 rounded shadow-lg ml-14">
-        <h1 className="text-3xl font-bold text-custom-green mb-1">Sign In</h1>
+        <h1 className='heading'>Sign In</h1>
         <p className="text-white mb-5">Admin Login: Access Your Dashboard</p>
         <form onSubmit={handleSubmit(handleSignIn)}>
           {/* <div className="mb-6">

@@ -25,7 +25,7 @@ const   Header = () => {
       </div>
       <div className="flex items-center space-x-4">
         <img
-          className="h-6 cursor-pointer"
+          className="h-6"
           src="/Skillsync-img/notification.svg"
           alt="Notification Icon"
         />
