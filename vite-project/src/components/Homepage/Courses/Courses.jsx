@@ -1,29 +1,68 @@
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router'
+import { IconPack } from '../../../constants/IconPack.js'
+import { Strings } from '../../../constants/Strings'
+import { setCurrentCourse } from '../../../Redux/Slice/CoursesSlice'
+import Pagination from 'rc-pagination'
+import 'rc-pagination/assets/index.css'
+import { useForm } from 'react-hook-form'
 
 const Courses = () => {
-  const courses = useSelector((state) => state.courses.courses)
-
+  const { register,watch } = useForm()
+  
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const courses = useSelector((state) => state.courses.courses)
+  // const currentCourse = useSelector((state) => state.courses.currentCourse)
+  // console.log('currentCourse ', currentCourse)
+  const isEditMode = useSelector((state) => state.courses.isEditMode)
+  console.log(isEditMode)
+
   const [copyCourses, setCopyCourses] = useState(courses)
   const [selectedStatus, setSelectedstatus] = useState('')
 
+  // For Pagination
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(2)
+  const totalItems = copyCourses.length
+  console.log(totalItems)
+  const currentItems = copyCourses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+
+  const entries = watch('entries')
+
+  useEffect(() => {
+    setItemsPerPage(entries)
+  }, [entries])
+
+  //To filter status
   const handleFilter = (e) => {
     const status = e.target.value
     console.log(status)
     setSelectedstatus(status)
     if (status) {
-      setCopyCourses(copyCourses.filter((course) => course.status === status))
-      // setIsTrue(true)
+      setCopyCourses(courses.filter((course) => course.status === status))
     } else {
       setCopyCourses(courses)
     }
+    setCurrentPage(1) // Reset to the first page
   }
-  console.log(copyCourses.length)
 
   const handleAddNew = () => {
     navigate('/courses/add-new-course', { replace: false })
+  }
+
+  // Scenario : To navigate to course Details of currentCourse
+
+  const handleCourseClick = (course) => {
+    console.log('course ', course)
+    dispatch(setCurrentCourse(course))
+    navigate('/courses/course-details', { replace: false })
   }
 
   return (
@@ -40,43 +79,25 @@ const Courses = () => {
 
           {/* Filter */}
           <select value={selectedStatus} onChange={handleFilter}>
-            <option value="">All</option>
-            <option value="Draft">Draft</option>
-            <option value="Inactive">Inactive</option>
-            <option value="Active">Active</option>
+            <option value="">{Strings.all}</option>
+            <option value="Draft">{Strings.draft}</option>
+            <option value="Inactive">{Strings.inactive}</option>
+            <option value="Active">{Strings.active}</option>
           </select>
-          {/* <div className="relative w-8 h-8 border border-gray-300 bg-white p-2 cursor-pointer">
-            <img
-              className="absolute w-6 h-6 top-1 left-1 object-contain pointer-events-none"
-              src="/Skillsync-img/filter.svg"
-              alt="filter"
-            />
-            <select
-              value={selectedStatus}
-              onChange={handleFilter}
-              className="absolute opacity-0 cursor-pointer"
-            >
-              <option value="">All</option>
-              <option value="draft">Draft</option>
-              <option value="inactive">Inactive</option>
-              <option value="active">Active</option>
-            </select>
-          </div> */}
-          {/* <img onClick={handleFilter} className="w-8 h-8 border border-gray-300 bg-white p-2 cursor-pointer " src="/Skillsync-img/filter.svg" alt="filter" /> */}
         </div>
         {/* Add New Button */}
         <button onClick={handleAddNew} className="btn-secondary">
-          Add new
+          {Strings.addNew}
         </button>
       </div>
-
       {/* Table of Courses */}
+      {/* Conditional Rendering */}
       {copyCourses.length === 0 ? (
         <div className="bg-white p-4 rounded shadow-md flex flex-col items-center space-y-4">
-          <h1>Table is Empty</h1>
-          <h2>Add Courses</h2>
+          <h1>{Strings.tableEmpty}</h1>
+          <h2>{Strings.addCourses}</h2>
           <button onClick={handleAddNew} className="btn-secondary">
-            Add new
+            {Strings.addNew}
           </button>
         </div>
       ) : (
@@ -87,23 +108,24 @@ const Courses = () => {
                 <th className="border-b p-2">Title</th>
                 <th className="flex border-b p-2">
                   <span className="pr-1">Mandatory</span>
-                  <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                  <img className="pt-1" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
                 <th className="border-b p-2">Category</th>
                 <th className="flex border-b p-2">
                   <span className="pr-1">No of assignee</span>
-                  <img className="pt-1" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                  <img className="pt-1" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
                 <th className="border-b p-2">
                   <span>Course duration</span>
-                  <img className="pt-1 float-right" src="/Skillsync-img/caretIcon.svg" alt="caret icon" />
+                  <img className="pt-1 float-right" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
                 <th className="border-b p-2">Status</th>
               </tr>
             </thead>
+            {/* Table Body */}
             <tbody>
-              {copyCourses.map((course, index) => (
-                <tr key={index} className="hover:bg-gray-50">
+              {currentItems.map((course, index) => (
+                <tr key={index} className="hover:bg-gray-50 cursor-pointer" onClick={() => handleCourseClick(course)}>
                   <td className="border-b p-2 truncate">{course.course_title}</td>
                   <td className="border-b p-2 truncate">{course.is_mandatory ? 'Yes' : 'No'}</td>
                   <td className="border-b p-2 truncate">{course.category}</td>
@@ -122,11 +144,17 @@ const Courses = () => {
                       {course.status}
                     </span>
                   </td>
-                  {/* className="text-green-400 border border-green-600 rounded-3xl pl-2 pr-2 bg-green-200" */}
                 </tr>
               ))}
             </tbody>
           </table>
+          <div className="flex justify-between mt-2">
+            <div>
+              show <input type="number" value={itemsPerPage} className="w-9 pl-1 h-5" {...register('entries')} />{' '}
+              entries
+            </div>
+            <Pagination current={currentPage} total={totalItems} pageSize={itemsPerPage} onChange={onPageChange} />
+          </div>
         </div>
       )}
 

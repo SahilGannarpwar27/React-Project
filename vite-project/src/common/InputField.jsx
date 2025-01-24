@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
+import { IconPack } from "../constants/IconPack.js";
 
+// Scenario : custom inputfield for Auth Section
 const InputField = ({ type, placeholder, register, error, showPasswordToggle, togglePasswordVisibility, showPassword }) => (
   <div className="mb-3 relative">
     <input
@@ -15,7 +17,7 @@ const InputField = ({ type, placeholder, register, error, showPasswordToggle, to
         className="absolute top-4 right-3 text-gray-500 hover:text-gray-700"
       >
         <img
-          src={showPassword ? '/Skillsync-img/hide.svg' : '/Skillsync-img/show.svg'}
+          src={showPassword ? IconPack.hide : IconPack.show}
           alt={showPassword ? 'Hide password' : 'Show password'}
           className="w-5 h-5"
         />

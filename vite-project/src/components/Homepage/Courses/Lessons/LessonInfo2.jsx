@@ -7,7 +7,7 @@ import InputFieldSecondary from '../../../../common/InputFieldSecondary'
 import { editLesson } from '../../../../Redux/Slice/CoursesSlice'
 import { Strings } from '../../../../constants/Strings'
 
-const LessonInfo = () => {
+const LessonInfo2 = () => {
   const dispatch = useDispatch()
   // const currentModule = useSelector((state) => state.courses.currentModule)
   const currentLesson = useSelector((state) => state.courses.currentLesson)
@@ -15,8 +15,8 @@ const LessonInfo = () => {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       lessonName: currentLesson.lesson_name,
@@ -26,30 +26,61 @@ const LessonInfo = () => {
     },
   })
 
-  const lessonName = watch('lessonName')
-  const duration = watch('duration')
-  const number = watch('number')
-  const lessonDescription = watch('lessonDescription')
-  console.log(lessonName)
 
-  // Scenario : Saving the lesson in slice
-  const handleSave = () => {
-    dispatch(editLesson({ lessonName : lessonName, duration :duration , number : number, lessonDescription : lessonDescription }))
 
+  const handleSave = (data) => {
+    dispatch(editLesson({
+      lessonName: data.lessonName,
+      duration: data.duration,
+      number: data.number,
+      lessonDescription: data.lessonDescription
+    }))
   }
 
-  //Scenario: to prepopulate after saving
+
+//   const handleSave = () => {
+//     dispatch(editLesson({ lessonName : lessonName, duration :duration , number : number, lessonDescription : lessonDescription }))
+
+//   }
+
+  //Scenario :  Watch all form fields
+  // const formValues = watch()
+
+  //Scenario : Update lesson data whenever form values change
+
+  // useEffect(() => {
+  //   if (formValues && currentLesson) {
+  //     const { lessonName, duration, number, lessonDescription } = formValues
+      
+  //     // Only dispatch if values have actually changed
+  //     if (
+  //       lessonName !== currentLesson.lesson_name ||
+  //       duration !== currentLesson.Duration ||
+  //       number !== currentLesson.sequence ||
+  //       lessonDescription !== currentLesson.content
+  //     ) {
+  //       dispatch(editLesson({
+  //         lessonName: lessonName || currentLesson.lesson_name,
+  //         duration: duration || currentLesson.Duration,
+  //         number: number || currentLesson.sequence,
+  //         lessonDescription: lessonDescription || currentLesson.content
+  //       }))
+  //     }
+  //   }
+  // }, [formValues, currentLesson, dispatch])
+
   useEffect(() => {
     if (currentLesson) {
-      
       reset({
-        lessonName: currentLesson.lesson_name || '',
-        duration: currentLesson.Duration || '',
-        number: currentLesson.sequence || '',
-        lessonDescription: currentLesson.content || '',
+        lessonName: currentLesson.lesson_name,
+        duration: currentLesson.Duration,
+        number: currentLesson.sequence,
+        lessonDescription: currentLesson.content
       })
     }
   }, [currentLesson, reset])
+
+
 
   return (
     <>
@@ -85,7 +116,7 @@ const LessonInfo = () => {
           </div>
           <div className="mt-2 flex flex-col items-stretch">
             <textarea
-              className="w-full border border-gray-300 rounded-sm p-3"
+              className="w-full border border-gray-300 rounded-sm"
               name=""
               id=""
               rows={10}
@@ -102,4 +133,4 @@ const LessonInfo = () => {
   )
 }
 
-export default LessonInfo
+export default LessonInfo2

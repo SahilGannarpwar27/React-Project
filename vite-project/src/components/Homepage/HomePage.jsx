@@ -1,16 +1,10 @@
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet} from 'react-router'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
-import { useEffect } from 'react'
+
 
 const HomePage = () => {
-  // const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   navigate('/homepage/dashboard')
-  // }, [])
-
   return (
     <div className="flex flex-col h-screen">
       {/* Header at the top */}

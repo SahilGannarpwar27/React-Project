@@ -1,5 +1,7 @@
-/* eslint-disable react/prop-types */
 
+// Scenario : custom inputfield for Courses Section
+
+/* eslint-disable react/prop-types */
 const InputFieldSecondary = ({ className, htmlFor, value, type, id, register, children, rows, cols }) => {
   return (
     <div className={className}>

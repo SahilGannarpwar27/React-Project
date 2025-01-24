@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -9,63 +9,103 @@ import InputFieldSecondary from '../../../common/InputFieldSecondary'
 import ModuleInfo from './Module/ModuleInfo'
 import Lessons from './Lessons/Lessons'
 import LessonInfo from './Lessons/LessonInfo'
-import { addCourse, setCurrentCourse } from '../../../Redux/Slice/CoursesSlice'
-import TestInfo from './Lessons/TestInfo'
+import TestInfo2 from './Module/Test/TestInfo2'
 import NewModal from './Module/NewModal'
+import { Strings } from '../../../constants/Strings'
+import { addCourse, changeStatus, editCourse, setIsEditMode } from '../../../Redux/Slice/CoursesSlice'
 
 const AddNewCourse = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const showModal = useSelector((state) => state.courses.showModal);
+  const {showModalType , showTest, currentCourse, isEditMode } = useSelector((state) => state.courses)
+  console.log(isEditMode)
+  // const showTest = useSelector((state) => state.courses.showTest)
   const [show, setShow] = useState(false)
   // const [newCourseName, setNewCourseName] = useState('')
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isSubmitting },
-  } = useForm()
+  const { register, handleSubmit, watch, reset } = useForm({
+    defaultValues: {
+      title: '',
+      mandatory: false,
+      category: '',
+      status: '',
+      modules: [],
+    },
+  })
 
   const course_title = watch('title')
   const is_mandatory = watch('mandatory')
   const status = watch('status')
   const category = watch('category')
-  // console.log(title)
-  // console.log(status)
-  // console.log(mandatory)
+
+  // Scenario: To save or edit course
   const handleSaveCourse = () => {
-    if (course_title === '' || is_mandatory === '' || status === '') {
+    if (course_title === '' || status === '' || category === '') {
       console.log('Each field is required!!!!!')
     } else {
       const newCourse = {
-        course_id: uuidv4(),
-          course_title: course_title,
-          is_mandatory: is_mandatory,
-          status: status,
-          category: category,
-          assignee: 0,
-          duration: '0 min',
-
+        course_id: isEditMode ? currentCourse.course_id : uuidv4(),
+        course_title: course_title,
+        is_mandatory: is_mandatory,
+        status: status,
+        category: category,
+        assignee: isEditMode ? currentCourse.assignee : 0,
+        duration: isEditMode ? currentCourse.duration : '0 min',
+        modules: isEditMode ? currentCourse.modules : [], // Preserve existing modules if in edit mode
       }
-      dispatch(addCourse(newCourse))
+      if (isEditMode) {
+        dispatch(editCourse(newCourse))
+      } else {
+        dispatch(addCourse(newCourse))
+      }
+
       // dispatch(setCurrentCourse(newCourse))
       setShow(true)
     }
   }
 
-  const handleBack = () => {
-    navigate('/courses', { replace: false })
+  //After clicking on Publish Button
+  const handlePublish = () => {
+    dispatch(changeStatus())
+    dispatch(setIsEditMode())
+    navigate('/courses', { replace: true })
   }
+
+  // To navigate back to Course Table
+  const handleBack = () => {
+    if (isEditMode === true) {
+      dispatch(setIsEditMode())
+      navigate('/courses/course-details', { replace: true })
+    } else {
+      navigate('/courses', { replace: false })
+    }
+  }
+
+  useEffect(() => {
+    if (isEditMode && currentCourse) {
+      reset({
+        title: currentCourse.course_title,
+        mandatory: currentCourse.is_mandatory,
+        category: currentCourse.category,
+        status: currentCourse.status,
+        modules: currentCourse.modules,
+      })
+      setShow(true)
+    }
+  }, [currentCourse, reset])
 
   return (
     <div className="pt-2">
       <div className="flex flex-1 justify-between items-center">
-        <h1 className="text-xl font-bold mb-4">Add New</h1>
+        <h1 className="text-xl font-bold mb-4">{Strings.addNew}</h1>
         <div>
           <button onClick={handleBack} className="btn-secondary">
-            Back
+            {Strings.back}
           </button>
-          <button className="btn-ternary">Publish</button>
+          {isEditMode && (
+            <button className="btn-ternary" onClick={handlePublish}>
+              {Strings.publish}
+            </button>
+          )}
         </div>
       </div>
       {/* Course Details Section */}
@@ -74,7 +114,7 @@ const AddNewCourse = () => {
           <span>Course details</span>
           <label className="text-gray-600">
             <input type="checkbox" className="mr-1" {...register('mandatory')} />
-            Mandatory to all
+            {Strings.mandatory}
           </label>
         </div>
         <form>
@@ -96,9 +136,9 @@ const AddNewCourse = () => {
               register={register('category')}
             >
               <option value=""></option>
-              <option value="Training">Trainings</option>
-              <option value="Compliance">Compliance</option>
-              <option value="Learning">Learning</option>
+              <option value="Training">{Strings.trainings}</option>
+              <option value="Compliance">{Strings.compliance}</option>
+              <option value="Learning">{Strings.learning}</option>
             </InputFieldSecondary>
             <InputFieldSecondary
               className="w-1/3"
@@ -109,19 +149,19 @@ const AddNewCourse = () => {
               register={register('status')}
             >
               <option value=""></option>
-              <option value="Active">Draft</option>
-              <option value="Active" disabled>
-                Active
+              <option value="Draft">{Strings.draft}</option>
+              <option value="Active" disabled={!isEditMode}>
+                {Strings.active}
               </option>
-              <option value="Inactive" disabled>
-                Inactive
+              <option value="Inactive" disabled={!isEditMode}>
+                {Strings.inactive}
               </option>
             </InputFieldSecondary>
           </div>
         </form>
         <div className="flex justify-end mt-4">
           <button onClick={handleSubmit(handleSaveCourse)} className="btn-ternary">
-            Save
+            {Strings.save}
           </button>
         </div>
       </div>
@@ -131,24 +171,21 @@ const AddNewCourse = () => {
         <div className="bg-white p-4 mt-2">
           {/* Module Info Section */}
 
-          <ModuleInfo/>
+          <ModuleInfo />
           <div className="flex flex-1 pt-4">
             {/* aside section */}
-            {/* Lesson Info Section */}
+
             <Lessons />
 
-            <LessonInfo />
-            {/* <TestInfo /> */}
-          </div>
-          <div className="flex justify-end mt-4">
-            <button onClick={handleSubmit(handleSaveCourse)} className="btn-ternary">
-              Save
-            </button>
+            {/* Lesson and Test Info Section */}
+
+            {!showTest && <LessonInfo />}
+            {showTest && <TestInfo2 />}
           </div>
         </div>
       )}
 
-      {showModal && <NewModal />}
+      {showModalType !== '' && <NewModal />}
     </div>
   )
 }

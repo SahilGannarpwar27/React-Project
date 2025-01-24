@@ -2,14 +2,15 @@ import { useEffect } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router'
+import { Link} from 'react-router'
 
 import { setUserEmail, setFalse } from '../../Redux/Slice/SignInSlice'
 import { openModal } from '../../Redux/Slice/ModalSlice'
+import { IconPack } from '../../constants/IconPack.js'
+import { Strings } from '../../constants/Strings'
 
 const ForgetPassword = () => {
   const dispatch = useDispatch()
-  // const navigate = useNavigate()
   const { userEmailError, userEmail } = useSelector((state) => state.signIn)
   const { type } = useSelector((state) => state.modal)
   const {
@@ -25,6 +26,8 @@ const ForgetPassword = () => {
     dispatch(setUserEmail(changeUserEmail))
   }
 
+  //When clicked on close button
+
   const handleCross = (e) => {
     e.preventDefault()
     dispatch(setFalse());
@@ -32,10 +35,6 @@ const ForgetPassword = () => {
     dispatch(openModal(''))
     console.log('Redux State after dispatch in CROSS:', userEmail, userEmailError)
   }
-
-  // const handleSignIn = () => {
-  //   navigate('/', { replace: true })
-  // }
 
   useEffect(() => {
     console.log('Redux State after dispatch:', userEmail, userEmailError)
@@ -55,16 +54,17 @@ const ForgetPassword = () => {
               <img
                 onClick={handleCross}
                 className="cursor-pointer absolute top-3 right-4 w-5 h-5 text-gray-500 hover:text-gray-700"
-                src="/Skillsync-img/cross.svg"
+                src={IconPack.cross}
                 alt="close"
               />
             )}
 
             <div className="text-center mt-2">
+              {/* ForgotPassword Section */}
               {type === 'ForgetPassword' && (
                 <>
-                  <img className="mx-auto mb-4" src="/Skillsync-img/forgotPassword.svg" alt="forgotPassword" />
-                  <p className="text-lg text-gray-700 mb-4">Enter your email to get your link!</p>
+                  <img className="mx-auto mb-4" src={IconPack.forgotPassword} alt="forgotPassword" />
+                  <p className="text-lg text-gray-700 mb-4">{Strings.emailLink}</p>
                   <input
                     className="block w-full p-3 mb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="email"
@@ -78,47 +78,33 @@ const ForgetPassword = () => {
                     })}
                   />
                   <p className="text-red-600">{errors.email?.message}</p>
-                  {!errors.email && userEmailError && <p className="text-red-600">Email does not exist</p>}
+                  {!errors.email && userEmailError && <p className="text-red-600">{Strings.emailNotExist}</p>}
                   {/* Send Button */}
                   <button
                     onClick={handleSubmit(handleClick)}
                     disabled={isSubmitting}
                     className="w-24 py-3 bg-custom-green text-white"
                   >
-                    Send
+                    {Strings.send}
                   </button>
                 </>
               )}
+              {/* EmailSent Section */}
               {type === 'Emailsent' && (
                 <>
                   <div className="mb-4">
-                    <img className="mx-auto mb-4 w-48" src="/Skillsync-img/sent-mail.gif" alt="Email-Sent" />
+                    <img className="mx-auto mb-4 w-48" src={IconPack.sentMail} alt="Email-Sent" />
                   </div>
                   <div className="">
                     <p className="text-lg text-gray-700 mb-4">
-                      Please click on the link sent to your registered email to reset your password
+                      {Strings.clickEmailToReset}
                     </p>
                     <Link to="/reset-password">
-                      <button className="w-24 py-3 bg-custom-green text-white ">Reset</button>
+                      <button className="w-24 py-3 bg-custom-green text-white ">{Strings.reset}</button>
                     </Link>
                   </div>
                 </>
               )}
-              {/* {type === 'ResetSuccessfull' && (
-                <>
-                  <div className="mb-4">
-                    <img className="mx-auto mb-4 w-48" src="/Skillsync-img/password.gif" alt="Password-Reset" />
-                  </div>
-                  <div className="">
-                    <p className="text-lg text-gray-700 mb-4">Password Reset Successful</p>
-                    <p>You will be redirected to the sign-in page in 10 seconds.</p>
-                    <p>00 : 10</p>
-                    <button onClick={handleSignIn} className="w-24 py-3 bg-custom-green text-white">
-                      Sign In
-                    </button>
-                  </div>
-                </>
-              )} */}
             </div>
           </div>
         </div>

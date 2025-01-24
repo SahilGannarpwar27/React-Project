@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 
+//Scenario : This incokes when wrong routing path is called
+
 const NotFound = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
