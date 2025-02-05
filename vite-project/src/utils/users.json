@@ -1,33 +1,38 @@
 [
-    {
-      "id": 1,
-      "username": "john_doe",
-      "email": "john.doe@example.com",
-      "password": "password123"
-    },
-    {
-      "id": 2,
-      "username": "jane_smith",
-      "email": "jane.smith@example.com",
-      "password": "securepassword456"
-    },
-    {
-      "id": 3,
-      "username": "alice_walker",
-      "email": "alice.walker@example.com",
-      "password": "alice2023!"
-    },
-    {
-      "id": 4,
-      "username": "bob_brown",
-      "email": "bob.brown@example.com",
-      "password": "bobBrown789"
-    },
-    {
-      "id": 5,
-      "username": "charlie_black",
-      "email": "charlie.black@example.com",
-      "password": "charlie@secure"
-    }
-  ]
-  
+  {
+    "id": 1,
+    "username": "john_doe",
+    "email": "john.doe@example.com",
+    "password": "password123"
+  },
+  {
+    "id": 2,
+    "username": "jane_smith",
+    "email": "jane.smith@example.com",
+    "password": "securepassword456"
+  },
+  {
+    "id": 3,
+    "username": "alice_walker",
+    "email": "alice.walker@example.com",
+    "password": "alice2023!"
+  },
+  {
+    "id": 4,
+    "username": "bob_brown",
+    "email": "bob.brown@example.com",
+    "password": "bobBrown789"
+  },
+  {
+    "id": 6,
+    "username": "aniket_kadukar",
+    "email": "aniketkadukar01@gmail.com",
+    "password": "admin@123"
+  },
+  {
+    "id": 7,
+    "username": "sahil_gannarpwar",
+    "email": "sahil.g@amazatic.com",
+    "password": "Sahil@2002"
+  }
+]

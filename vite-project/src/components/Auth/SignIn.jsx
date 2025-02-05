@@ -1,4 +1,4 @@
-import { useEffect} from 'react'
+import { useEffect, useState } from 'react'
 
 import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
@@ -8,21 +8,20 @@ import { Link, useNavigate } from 'react-router'
 import ForgetPassword from './ForgetPassword'
 import InputField from '../../common/InputField'
 import usePasswordToggle from '../../hooks/usePasswordToggle'
-import Background from '../../common/Background';
-import { checkCredentials } from '../../Redux/Slice/SignInSlice'
+import Background from '../../common/Background'
 import { openModal } from '../../Redux/Slice/ModalSlice'
-import { setFalse } from '../../Redux/Slice/SignInSlice'
+import { signInUser } from '../../Redux/Slice/SignInSlice'
 import './SignIn.css'
-
-
+import { Strings } from '../../constants/Strings'
+import { PATH_SIGNUP, PATH_DASHBOARD } from '../../constants/RouteConstants'
 
 const SignIn = () => {
-  const userState = useSelector((state) => state.signIn)
-
+  const [isinvalidError, setIsInvalidError] = useState(null)
+  const isAuthenticated = useSelector((state) => state?.signIn?.isAuthenticated)
   const { type } = useSelector((state) => state.modal)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [showPassword, togglePasswordVisibility] = usePasswordToggle();
+  const [showPassword, togglePasswordVisibility] = usePasswordToggle()
 
   const {
     register,
@@ -31,97 +30,75 @@ const SignIn = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const emailTyped = watch('email')
-  const passwordTyped = watch('password')
-
-  // Toggle password visibility
-
-
+  const formValues = watch()
   // Handle sign-in
-  const handleSignIn = () => {
-    dispatch(checkCredentials({ emailTyped, passwordTyped }))
+  const handleSignIn = async () => {
+    try {
+      await dispatch(signInUser(formValues)).unwrap()
+    } catch (errorMessage) {
+      setIsInvalidError(errorMessage)
+      toast.error(errorMessage)
+    }
   }
-
+  console.log('type in handleCross = ', type)
   // Handle forgot password modal
   const toggleModal = (e) => {
     e.preventDefault()
-    dispatch(setFalse())
     dispatch(openModal('ForgetPassword'))
   }
 
   // Navigate to homepage if authenticated
   useEffect(() => {
-    if (userState?.isAuthenticated) {
+    if (isAuthenticated) {
       toast.success('Signed In Successfully')
-      navigate('/dashboard', { replace: true })
+      navigate(PATH_DASHBOARD, { replace: true })
     }
     dispatch(openModal(''))
-  }, [userState.isAuthenticated, navigate])
+  }, [isAuthenticated, navigate, dispatch])
 
   return (
     <>
       <Background>
-      <div className="w-full max-w-md p-8 rounded shadow-lg ml-14">
-        <h1 className='heading'>Sign In</h1>
-        <p className="text-white mb-5">Admin Login: Access Your Dashboard</p>
-        <form onSubmit={handleSubmit(handleSignIn)}>
-          {/* <div className="mb-6">
-            <input
+        <div className="w-full max-w-md p-8 rounded shadow-lg ml-14">
+          <h1 className="heading">{Strings.signIn}</h1>
+          <p className="text-white mb-5">{Strings.adminLogin}</p>
+          <form onSubmit={handleSubmit(handleSignIn)}>
+            <InputField
               type="email"
-              className="mt-1 p-2 w-full border rounded-sm bg-white "
               placeholder="Email"
-              {...register('email', {
+              register={register('email', {
                 required: 'This field is required',
                 pattern: { value: /^\S+@\S+$/i, message: 'Please enter a valid email address' },
               })}
+              error={errors.email}
             />
-            <p className="text-red-600">{errors.email?.message}</p>
-          </div> */}
-          <InputField
-            type="email"
-            placeholder="Email"
-            register={register('email', {
-              required: 'This field is required',
-              pattern: { value: /^\S+@\S+$/i, message: 'Please enter a valid email address' },
-            })}
-            error={errors.email}
-          />
-          <InputField
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
-            register={register('password', { required: 'This field is required' })}
-            error={errors.password}
-            showPasswordToggle
-            togglePasswordVisibility={togglePasswordVisibility}
-            showPassword={showPassword}
-          />
-          {!errors.password && userState.error && <p className="text-red-600">Invalid email or password</p>}
-
-          <div className="flex justify-between items-center">
-            {/* Sign In Button */}
-            <div className="flex flex-col items-end mr-auto">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn-primary"
-              >
-                {isSubmitting ? 'Signing In' : 'Sign In'}
+            <InputField
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              register={register('password', { required: 'This field is required' })}
+              error={errors.password}
+              showPasswordToggle
+              togglePasswordVisibility={togglePasswordVisibility}
+              showPassword={showPassword}
+            />
+            {!errors.password && isinvalidError && <p className="text-red-600">{Strings.invalidEmailPassword}</p>}
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col items-end mr-auto">
+                <button type="submit" disabled={isSubmitting} className="btn-primary">
+                  {isSubmitting ? 'Signing In' : 'Sign In'}
+                </button>
+                <Link to={PATH_SIGNUP}>
+                  <p className="text-sm text-white pb-8 hover:underline">{Strings.createAccount}</p>
+                </Link>
+              </div>
+              <button onClick={toggleModal} className=" text-sm text-white pb-8 hover:underline self-start">
+                {Strings.forgotPassword}
               </button>
-              {/* Sign up button */}
-              <Link to="/signup">
-                <p className="text-sm text-white pb-8 hover:underline">Create an account</p>
-              </Link>
             </div>
-            {/* Forget Password */}
-            <button onClick={toggleModal} className=" text-sm text-white pb-8 hover:underline self-start">
-              Forgot password?
-            </button>
-          </div>
-        </form>
-      </div>
-      {/* <Toaster /> */}
-      {userState.isAuthenticated && console.log('Sign In')}
-      {type !== '' && <ForgetPassword />}
+          </form>
+        </div>
+        {isAuthenticated && console.log('Sign In')}
+        {type !== '' && <ForgetPassword />}
       </Background>
     </>
   )

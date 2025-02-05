@@ -4,7 +4,6 @@ const ModalSlice = createSlice({
     name : "ModalSlice",
     initialState: {
         type : "",
-        // isLoggedIn : false,
     },
 
     reducers: {
@@ -13,9 +12,6 @@ const ModalSlice = createSlice({
             state.type = modalType;
             console.log(state.type);
         },
-        // setLoggedIn: (state) =>{
-        //     state.isLoggedIn = !state.isLoggedIn;
-        // }
     }
 })
 

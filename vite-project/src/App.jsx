@@ -9,7 +9,7 @@ import SignUp from './components/Auth/SignUp'
 import Shimmer from './common/Shimmer'
 import ProtectedRoute from './components/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
-import { PATH_LOGIN,PATH_RESETPASSWORD, PATH_SIGNUP } from './constants/RouteConstants'
+import { PATH_ADDNEWCOURSE, PATH_COURSEDETAILS, PATH_COURSES, PATH_DASHBOARD, PATH_LOGIN,PATH_RESETPASSWORD, PATH_SIGNUP, PATH_USERMANAGEMENT } from './constants/RouteConstants'
 
 import './App.css'
 import Dashboard from './components/Homepage/Dashboard'
@@ -17,6 +17,8 @@ import Courses from './components/Homepage/Courses/Courses'
 import UserManagement from './components/Homepage/UserManagement'
 import AddNewCourse from './components/Homepage/Courses/AddNewCourse'
 import NotFound from './common/NotFound'
+import CourseDetails from './components/Homepage/Courses/CourseDetails/CourseDetails'
+import ResetPasswordRedirect from './components/Auth/ResetPasswordRedirect'
 
 function App() {
   const [isLoaded, setIsloaded] = useState(false)
@@ -39,10 +41,11 @@ function App() {
           <Route path={PATH_LOGIN} element={<SignIn />} />
           <Route path={PATH_RESETPASSWORD} element={<ResetPassword />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="courses" element={<Courses />} />
-            <Route path="courses/add-new-course" element={<AddNewCourse />} />
-            <Route path="user-management" element={<UserManagement />} />
+            <Route path={PATH_DASHBOARD} element={<Dashboard />} />
+            <Route path={PATH_COURSES} element={<Courses />} />
+            <Route path={PATH_ADDNEWCOURSE} element={<AddNewCourse />} />
+            <Route path={PATH_COURSEDETAILS} element={<CourseDetails />} />
+            <Route path={PATH_USERMANAGEMENT} element={<UserManagement />} />
           </Route>
           <Route path="*" element={<NotFound />} />
           <Route path={PATH_SIGNUP} element={<SignUp />} />
