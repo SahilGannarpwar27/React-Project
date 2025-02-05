@@ -13,6 +13,7 @@ const ResetSuccessful = ({ show }) => {
   const dispatch = useDispatch();
   const [timer, setTimer] = useState(10);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSignIn = () => {
     dispatch(openModal(""))
     navigate('/login', { replace: true })
@@ -26,7 +27,7 @@ const ResetSuccessful = ({ show }) => {
     } else if (timer === 0) {
       handleSignIn();
     }
-  }, [timer]);
+  }, [handleSignIn, timer]);
 
   return (
     <>

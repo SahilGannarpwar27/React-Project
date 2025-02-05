@@ -18,6 +18,7 @@ import UserManagement from './components/Homepage/UserManagement'
 import AddNewCourse from './components/Homepage/Courses/AddNewCourse'
 import NotFound from './common/NotFound'
 import CourseDetails from './components/Homepage/Courses/CourseDetails/CourseDetails'
+import ResetPasswordRedirect from './components/Auth/ResetPasswordRedirect'
 
 function App() {
   const [isLoaded, setIsloaded] = useState(false)

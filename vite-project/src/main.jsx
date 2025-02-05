@@ -21,7 +21,3 @@ createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </Provider>
 )
-
-{
-  /* <PersistGate persistor={persister}></PersistGate> */
-}

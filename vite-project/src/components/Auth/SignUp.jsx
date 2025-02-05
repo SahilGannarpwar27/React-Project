@@ -1,18 +1,18 @@
 import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 
 import InputField from '../../common/InputField'
 import usePasswordToggle from '../../hooks/usePasswordToggle'
 import Background from '../../common/Background'
-import { createUser } from '../../Redux/Slice/SignInSlice'
+import ForgetPassword from './ForgetPassword'
+import { signUpUser } from '../../Redux/Slice/SignInSlice'
 import { Strings } from '../../constants/Strings'
+import { openModal } from '../../Redux/Slice/ModalSlice'
 
 const SignUp = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-
+  const { type } = useSelector((state) => state.modal)
   const {
     register,
     handleSubmit,
@@ -20,39 +20,43 @@ const SignUp = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const username = watch('username')
-  const email = watch('email')
-  const password = watch('password')
+  const formValues = watch()
+  console.log(formValues)
 
   const [showPassword, togglePasswordVisibility] = usePasswordToggle()
-  const [showRePassword, toggleRePasswordVisibility] = usePasswordToggle()
-
-
-  // Creating new user credentials
-  const handleSignUp = () => {
-    dispatch(createUser({ username, email, password }))
-    toast.success('Signed Up Successfully')
-    navigate('/login', { replace: true })
+  const handleSignUp = async () => {
+    try {
+      await dispatch(signUpUser(formValues)).unwrap()
+      dispatch(openModal('createPassword'))
+    } catch (errorMessage) {
+      console.log(errorMessage)
+      toast.error(errorMessage || errorMessage?.email)
+    }
   }
-
   return (
     <>
       <Background>
         <div className="w-full max-w-md p-8 rounded shadow-lg ml-14">
           <h1 className="text-3xl font-bold text-custom-green mb-8 ">{Strings.signUp}</h1>
           <form onSubmit={handleSubmit(handleSignUp)}>
-            {/* Username Input */}
             <InputField
               type="text"
-              placeholder="Username"
-              register={register('username', {
+              placeholder="First Name"
+              register={register('first_name', {
                 required: 'This field is required',
-                maxLength: { value: 20, message: 'Username cannot exceed 20 characters' },
+                maxLength: { value: 20, message: 'First cannot exceed 20 characters' },
               })}
-              error={errors.username}
+              error={errors.first_name}
             />
-
-            {/* Email Input */}
+            <InputField
+              type="text"
+              placeholder="Last Name"
+              register={register('last_name', {
+                required: 'This field is required',
+                maxLength: { value: 20, message: 'First cannot exceed 20 characters' },
+              })}
+              error={errors.last_name}
+            />
             <InputField
               type="email"
               placeholder="Email"
@@ -62,7 +66,45 @@ const SignUp = () => {
               })}
               error={errors.email}
             />
-
+            <InputField
+              type="text"
+              placeholder="Phone Number"
+              register={register('phone_number', {
+                required: 'This field is required',
+                pattern: {
+                  value: /^[789]\d{9}$/,
+                  message: 'Invalid mobile number (must start with 7, 8, or 9 and be 10 digits long)',
+                },
+              })}
+              error={errors.phone_number}
+            />
+            <InputField
+              type="select"
+              register={register('gender', {
+                required: 'This field is required',
+              })}
+              error={errors.gender}
+            >
+              <option value="" disabled>
+                Select Gender
+              </option>
+              <option value="CHRELgT">Male</option>
+              <option value="CHEfbqz">Female</option>
+              <option value="O">Other</option>
+            </InputField>
+            <InputField
+              type="select"
+              register={register('role', {
+                required: 'This field is required',
+              })}
+              error={errors.role}
+            >
+              <option value="" disabled>
+                Select Role
+              </option>
+              <option value="CHA6xgL">HR</option>
+              <option value="Admin">Admin</option>
+            </InputField>
             {/* Password Input */}
             <InputField
               type={showPassword ? 'text' : 'password'}
@@ -81,21 +123,6 @@ const SignUp = () => {
               togglePasswordVisibility={togglePasswordVisibility}
               showPassword={showPassword}
             />
-
-            {/* Re-enter Password Input */}
-            <InputField
-              type={showRePassword ? 'text' : 'password'}
-              placeholder="Re-enter Password"
-              register={register('rePassword', {
-                required: 'This field is required',
-                minLength: { value: 8, message: 'At least 8 characters' },
-                validate: (value) => value === password || 'Passwords do not match',
-              })}
-              error={errors.rePassword}
-              showPasswordToggle
-              togglePasswordVisibility={toggleRePasswordVisibility}
-              showPassword={showRePassword}
-            />
             {/* Sign Up Button */}
             <div className="flex justify-between">
               <button type="submit" disabled={isSubmitting} className="btn-primary">
@@ -104,9 +131,9 @@ const SignUp = () => {
             </div>
           </form>
         </div>
+        {type !== '' && <ForgetPassword />}
       </Background>
     </>
   )
 }
-
 export default SignUp

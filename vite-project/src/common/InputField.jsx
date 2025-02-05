@@ -1,15 +1,25 @@
 /* eslint-disable react/prop-types */
-import { IconPack } from "../constants/IconPack.js";
+import { IconPack } from '../constants/IconPack.js'
 
 // Scenario : custom inputfield for Auth Section
-const InputField = ({ type, placeholder, register, error, showPasswordToggle, togglePasswordVisibility, showPassword }) => (
+const InputField = ({
+  type,
+  placeholder,
+  register,
+  error,
+  showPasswordToggle,
+  togglePasswordVisibility,
+  showPassword,
+  children,
+}) => (
   <div className="mb-3 relative">
-    <input
-      type={type}
-      className="mt-1 p-2 w-full border rounded-sm bg-white"
-      placeholder={placeholder}
-      {...register}
-    />
+    {type === 'select' ? (
+      <select className="inputFieldStyle" {...register}>
+        {children}
+      </select>
+    ) : (
+      <input type={type} className="inputFieldStyle" placeholder={placeholder} {...register} />
+    )}
     {showPasswordToggle && (
       <button
         type="button"
@@ -25,6 +35,6 @@ const InputField = ({ type, placeholder, register, error, showPasswordToggle, to
     )}
     {error && <p className="text-red-600">{error?.message}</p>}
   </div>
-);
+)
 
-export default InputField;
+export default InputField

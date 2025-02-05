@@ -1,19 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import toast from 'react-hot-toast'
+import { useSearchParams } from 'react-router'
 import { useForm } from 'react-hook-form'
-import { useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import ResetSuccessful from './ResetSuccessful'
-import { changePassword } from '../../Redux/Slice/SignInSlice'
 import InputField from '../../common/InputField'
+import ResetSuccessful from './ResetSuccessful'
 import usePasswordToggle from '../../hooks/usePasswordToggle'
 import Background from '../../common/Background'
+import { resetPasswordUser, setAuthData } from '../../Redux/Slice/SignInSlice'
 import { Strings } from '../../constants/Strings'
 
 const ResetPassword = () => {
   const [show, setShow] = useState(false)
-
+  const [searchParams] = useSearchParams()
   const dispatch = useDispatch()
+  const uidb64 = searchParams.get('uidb64')
+  const token = searchParams.get('token')
+  const headers = { Authorization: `Token ${token}` }
+  console.log('uidb64 == ', uidb64)
+  console.log('token == ', token)
 
   const {
     register,
@@ -22,17 +29,36 @@ const ResetPassword = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const newPassword = watch('password')
+  const new_password = watch('new_password')
+  const formValues = watch()
+  console.log(formValues)
+  console.log({ uidb64: uidb64, ...formValues })
 
   const [showPassword, togglePasswordVisibility] = usePasswordToggle()
   const [showRePassword, toggleRePasswordVisibility] = usePasswordToggle()
 
-
   // Resets the password in redux store
-  const handleResetClick = () => {
-    dispatch(changePassword(newPassword))
-    setShow(true)
+  const handleResetClick = async () => {
+    try {
+      const response = dispatch(resetPasswordUser({ uidb64, formValues, headers })).unwrap()
+      if (response) {
+        console.log(response)
+        toast.success('Password has been reset successfully.')
+        setShow(true)
+      }
+    } catch (errormessage) {
+      console.log(errormessage)
+      toast.error(errormessage)
+    }
   }
+
+  useEffect(() => {
+    const data = {
+      uidb64: uidb64,
+      token: token,
+    }
+    dispatch(setAuthData(data))
+  }, [dispatch, searchParams, token, uidb64])
 
   return (
     <>
@@ -45,7 +71,7 @@ const ResetPassword = () => {
             <InputField
               type={showPassword ? 'text' : 'password'}
               placeholder="Enter password"
-              register={register('password', {
+              register={register('new_password', {
                 required: 'This field is required',
                 minLength: { value: 8, message: 'Password must be at least 8 characters long' },
                 pattern: {
@@ -54,7 +80,7 @@ const ResetPassword = () => {
                     'Make sure your password includes: an uppercase letter, a lowercase letter, a number, a special character, and no spaces.',
                 },
               })}
-              error={errors.password}
+              error={errors.new_password}
               showPasswordToggle
               togglePasswordVisibility={togglePasswordVisibility}
               showPassword={showPassword}
@@ -63,12 +89,12 @@ const ResetPassword = () => {
             <InputField
               type={showRePassword ? 'text' : 'password'}
               placeholder="Re-enter password"
-              register={register('confirmPassword', {
+              register={register('confirm_password', {
                 required: 'This field is required',
                 minLength: { value: 8, message: 'Password must be at least 8 characters long' },
-                validate: (value) => value === newPassword || 'Passwords do not match',
+                validate: (value) => value === new_password || 'Passwords do not match',
               })}
-              error={errors.confirmPassword}
+              error={errors.confirm_password}
               showPasswordToggle
               togglePasswordVisibility={toggleRePasswordVisibility}
               showPassword={showRePassword}
@@ -81,7 +107,7 @@ const ResetPassword = () => {
                 disabled={isSubmitting}
                 className="btn-primary"
               >
-                {Strings.reset}
+                {!isSubmitting ? Strings.reset : 'Resetting'}
               </button>
             </div>
           </form>

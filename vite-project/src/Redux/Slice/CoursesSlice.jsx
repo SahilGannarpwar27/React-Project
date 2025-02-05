@@ -17,7 +17,7 @@ const CoursesSlice = createSlice({
   reducers: {
     addCourse: (state, action) => {
       const data = action.payload
-      const existingData = state.courses.find((course) => course?.course_id === data?.course_id)
+      const existingData = state.courses.find((course) => course?.course_title === data?.course_title)
       if (existingData && !state.isEditMode) {
         toast.error('Data Already Exist')
         console.log('Data Already Exist')
@@ -311,12 +311,9 @@ const CoursesSlice = createSlice({
     changeStatus: (state) => {
       const targetCourse = state.courses?.find((c) => c.course_id === state.currentCourse?.course_id)
       if(targetCourse){
-        targetCourse.status === 'Active'
-        state.currentCourse.status === 'Active'
+        targetCourse.status = 'Active'
+        state.currentCourse.status = 'Active'
       }
-
-      
-
     },
   },
 })

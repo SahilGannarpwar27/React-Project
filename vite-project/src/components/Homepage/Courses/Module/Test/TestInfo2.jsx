@@ -12,8 +12,6 @@ const TestInfo2 = () => {
   const currentTest = useSelector((state) => state.courses.currentModule.test)
 
   //Scenario :  Used custom hooks to maintain functionalities
-
-
   const [
     handleSaveOption,
     handleDeleteOption,

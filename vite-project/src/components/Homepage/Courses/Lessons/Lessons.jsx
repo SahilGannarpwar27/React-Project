@@ -5,8 +5,7 @@ import { Strings } from '../../../../constants/Strings'
 
 const Lessons = () => {
   const dispatch = useDispatch()
-  //const currentCourse = useSelector((state) => state.courses.currentCourse) // Get current course from Redux
-  const currentModule = useSelector((state) => state.courses.currentModule) // Get current module from Redux
+  const currentModule = useSelector((state) => state.courses.currentModule)
   const currentLesson = useSelector((state) => state.courses.currentLesson)
   const showTest = useSelector((state) => state.courses.showTest)
 
@@ -51,7 +50,7 @@ const Lessons = () => {
       ) : (
         <>
           <ul className="w-full">
-            {currentModule.lessons.map((lesson) => (
+            {currentModule?.lessons?.map((lesson) => (
               <li
                 key={lesson.lesson_id}
                 className={`mb-4 p-3 border-l-2 flex justify-between items-center cursor-pointer group hover:bg-opacity-90 ${currentLesson?.lesson_id === lesson.lesson_id && showTest === false ? 'bg-green-100 border-green-400' : 'bg-gray-100 border-gray-400'}`}

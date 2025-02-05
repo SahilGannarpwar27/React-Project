@@ -9,7 +9,6 @@ const ModuleInfo = () => {
   const dispatch = useDispatch()
 
   //Scenario : handleAddModule used to add new Module to currentCourse
-
   const handleAddModule = () => {
     if (currentCourse) {
       dispatch(addModule())
@@ -17,19 +16,16 @@ const ModuleInfo = () => {
   }
 
   //Scenario : handleEdit used to edit Module to currentCourse
-
   const handleEdit = () => {
     dispatch(setShowModal('editModule'))
   }
 
   //Scenario : handleDelete used to delete Module to currentCourse
-
   const handleDelete = () => {
     dispatch(setShowModal('deleteModule'))
   }
 
   //Scenario : Onclick setting the module we are using as CurrentModule
-
   const handleModuleClick = (module) => {
     dispatch(setCurrentModule(module))
   }
@@ -60,7 +56,6 @@ const ModuleInfo = () => {
           </li>
         ))}
       </ul>
-      
       {/* Add Button */}
       <p className="flex items-center pb-1 cursor-pointer" onClick={handleAddModule}>
         <img src={IconPack.addTraining} alt="add-training" className="mr-2" />

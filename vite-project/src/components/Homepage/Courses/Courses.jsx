@@ -9,7 +9,11 @@ import 'rc-pagination/assets/index.css'
 import { useForm } from 'react-hook-form'
 
 const Courses = () => {
-  const { register,watch } = useForm()
+  const { register,watch } = useForm({
+    defaultValues: {
+      entries : 2,
+    },
+  })
   
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -96,7 +100,7 @@ const Courses = () => {
         <div className="bg-white p-4 rounded shadow-md flex flex-col items-center space-y-4">
           <h1>{Strings.tableEmpty}</h1>
           <h2>{Strings.addCourses}</h2>
-          <button onClick={handleAddNew} className="btn-secondary">
+          <button onClick={handleAddNew} className="btn-secondary ml-6">
             {Strings.addNew}
           </button>
         </div>
@@ -105,21 +109,21 @@ const Courses = () => {
           <table className="min-w-full table-auto border-collapse mt-4 bg-white">
             <thead>
               <tr className="text-left">
-                <th className="border-b p-2">Title</th>
+                <th className="border-b p-2">{Strings.title}</th>
                 <th className="flex border-b p-2">
-                  <span className="pr-1">Mandatory</span>
+                  <span className="pr-1">{Strings.mandatory}</span>
                   <img className="pt-1" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
-                <th className="border-b p-2">Category</th>
+                <th className="border-b p-2">{Strings.category}</th>
                 <th className="flex border-b p-2">
-                  <span className="pr-1">No of assignee</span>
+                  <span className="pr-1">{Strings.noOfAssignee}</span>
                   <img className="pt-1" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
                 <th className="border-b p-2">
-                  <span>Course duration</span>
+                  <span>{Strings.courseDuration}</span>
                   <img className="pt-1 float-right" src={IconPack.caretIcon} alt="caret icon" />
                 </th>
-                <th className="border-b p-2">Status</th>
+                <th className="border-b p-2">{Strings.status}</th>
               </tr>
             </thead>
             {/* Table Body */}
@@ -157,7 +161,6 @@ const Courses = () => {
           </div>
         </div>
       )}
-
       <Outlet />
     </div>
   )

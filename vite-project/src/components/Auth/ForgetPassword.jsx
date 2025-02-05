@@ -1,17 +1,22 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 
+import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link} from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
-import { setUserEmail, setFalse } from '../../Redux/Slice/SignInSlice'
+import { forgetPasswordUser } from '../../Redux/Slice/SignInSlice'
 import { openModal } from '../../Redux/Slice/ModalSlice'
 import { IconPack } from '../../constants/IconPack.js'
-import { Strings } from '../../constants/Strings'
+import { PATH_LOGIN, PATH_RESETPASSWORD } from '../../constants/RouteConstants.jsx'
+import { Strings } from '../../constants/Strings.jsx'
+
 
 const ForgetPassword = () => {
   const dispatch = useDispatch()
-  const { userEmailError, userEmail } = useSelector((state) => state.signIn)
+  const navigate = useNavigate()
+  const [userEmailError, setUserEmailError] = useState(null)
+  const { userEmail } = useSelector((state) => state.signIn)
   const { type } = useSelector((state) => state.modal)
   const {
     register,
@@ -20,34 +25,48 @@ const ForgetPassword = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const changeUserEmail = watch('email')
+  const formValues = watch()
+  console.log(formValues)
+  console.log(formValues['email'])
 
-  const handleClick = () => {
-    dispatch(setUserEmail(changeUserEmail))
+  const handleClick = async () => {
+    try {
+      const response = await dispatch(forgetPasswordUser(formValues)).unwrap()
+      console.log(response)
+      console.log(response?.data)
+      if (response) {
+        dispatch(openModal('Emailsent'))
+        toast.success(response?.data?.message)
+      }
+    } catch (errorMessage) {
+      console.log(errorMessage)
+      setUserEmailError((prev) => !prev)
+      toast.error(errorMessage || 'Invalid Email')
+    }
   }
 
   //When clicked on close button
-
   const handleCross = (e) => {
     e.preventDefault()
-    dispatch(setFalse());
-    dispatch(setUserEmail(''))
     dispatch(openModal(''))
     console.log('Redux State after dispatch in CROSS:', userEmail, userEmailError)
+    console.log('type in handleCross = ', type)
   }
 
-  useEffect(() => {
-    console.log('Redux State after dispatch:', userEmail, userEmailError)
+  console.log('type = ', type)
 
-    if (userEmail !== '' && userEmailError === false) {
-      dispatch(openModal('Emailsent'))
-    }
-  }, [userEmail, userEmailError, dispatch])
+  const handleClickSignUp = () => {
+    dispatch(openModal(''))
+    navigate(PATH_LOGIN, { replace: true })
+  }
 
   return (
     <>
-      <div className={`fixed inset-0 bg-black opacity-50 z-50`}></div>
-      <div className={`fixed inset-0 flex justify-center items-center z-50 `}>
+      <div className="fixed inset-0 bg-black opacity-50 z-50"></div>
+      <div
+        className={`fixed inset-0 flex ${type === 'createPassword' && 'cursor-pointer'} justify-center items-center z-50 `}
+        onClick={type === 'createPassword' ? handleClickSignUp : undefined}
+      >
         <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="bg-white p-10 rounded-sm relative w-full max-w-md">
             {(type === 'ForgetPassword' || type === 'Emailsent') && (
@@ -85,23 +104,23 @@ const ForgetPassword = () => {
                     disabled={isSubmitting}
                     className="w-24 py-3 bg-custom-green text-white"
                   >
-                    {Strings.send}
+                    {!isSubmitting ? Strings.send : 'Sending'}
                   </button>
                 </>
               )}
               {/* EmailSent Section */}
-              {type === 'Emailsent' && (
+              {(type === 'Emailsent' || type === 'createPassword') && (
                 <>
                   <div className="mb-4">
                     <img className="mx-auto mb-4 w-48" src={IconPack.sentMail} alt="Email-Sent" />
                   </div>
                   <div className="">
-                    <p className="text-lg text-gray-700 mb-4">
-                      {Strings.clickEmailToReset}
-                    </p>
-                    <Link to="/reset-password">
-                      <button className="w-24 py-3 bg-custom-green text-white ">{Strings.reset}</button>
-                    </Link>
+                    <p className="text-lg text-gray-700 mb-4">{Strings.clickEmailToReset}</p>
+                    {type === 'Emailsent' && (
+                      <Link to={PATH_RESETPASSWORD}>
+                        <button className="w-24 py-3 bg-custom-green text-white ">{Strings.reset}</button>
+                      </Link>
+                    )}
                   </div>
                 </>
               )}

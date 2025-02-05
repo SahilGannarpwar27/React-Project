@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
@@ -9,19 +9,18 @@ import ForgetPassword from './ForgetPassword'
 import InputField from '../../common/InputField'
 import usePasswordToggle from '../../hooks/usePasswordToggle'
 import Background from '../../common/Background'
-import { checkCredentials } from '../../Redux/Slice/SignInSlice'
 import { openModal } from '../../Redux/Slice/ModalSlice'
-import { setFalse } from '../../Redux/Slice/SignInSlice'
+import { signInUser } from '../../Redux/Slice/SignInSlice'
 import './SignIn.css'
 import { Strings } from '../../constants/Strings'
+import { PATH_SIGNUP, PATH_DASHBOARD } from '../../constants/RouteConstants'
 
 const SignIn = () => {
-  const userState = useSelector((state) => state.signIn)
-
+  const [isinvalidError, setIsInvalidError] = useState(null)
+  const isAuthenticated = useSelector((state) => state?.signIn?.isAuthenticated)
   const { type } = useSelector((state) => state.modal)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // Toggle password visibility
   const [showPassword, togglePasswordVisibility] = usePasswordToggle()
 
   const {
@@ -31,29 +30,31 @@ const SignIn = () => {
     formState: { errors, isSubmitting },
   } = useForm()
 
-  const emailTyped = watch('email')
-  const passwordTyped = watch('password')
-
+  const formValues = watch()
   // Handle sign-in
-  const handleSignIn = () => {
-    dispatch(checkCredentials({ emailTyped, passwordTyped }))
+  const handleSignIn = async () => {
+    try {
+      await dispatch(signInUser(formValues)).unwrap()
+    } catch (errorMessage) {
+      setIsInvalidError(errorMessage)
+      toast.error(errorMessage)
+    }
   }
-
+  console.log('type in handleCross = ', type)
   // Handle forgot password modal
   const toggleModal = (e) => {
     e.preventDefault()
-    dispatch(setFalse())
     dispatch(openModal('ForgetPassword'))
   }
 
   // Navigate to homepage if authenticated
   useEffect(() => {
-    if (userState?.isAuthenticated) {
+    if (isAuthenticated) {
       toast.success('Signed In Successfully')
-      navigate('/dashboard', { replace: true })
+      navigate(PATH_DASHBOARD, { replace: true })
     }
     dispatch(openModal(''))
-  }, [userState.isAuthenticated, navigate])
+  }, [isAuthenticated, navigate, dispatch])
 
   return (
     <>
@@ -80,28 +81,23 @@ const SignIn = () => {
               togglePasswordVisibility={togglePasswordVisibility}
               showPassword={showPassword}
             />
-            {!errors.password && userState.error && <p className="text-red-600">{Strings.invalidEmailPassword}</p>}
-
+            {!errors.password && isinvalidError && <p className="text-red-600">{Strings.invalidEmailPassword}</p>}
             <div className="flex justify-between items-center">
-              {/* Sign In Button */}
               <div className="flex flex-col items-end mr-auto">
                 <button type="submit" disabled={isSubmitting} className="btn-primary">
                   {isSubmitting ? 'Signing In' : 'Sign In'}
                 </button>
-                {/* Sign up button */}
-                <Link to="/signup">
+                <Link to={PATH_SIGNUP}>
                   <p className="text-sm text-white pb-8 hover:underline">{Strings.createAccount}</p>
                 </Link>
               </div>
-              {/* Forget Password */}
               <button onClick={toggleModal} className=" text-sm text-white pb-8 hover:underline self-start">
                 {Strings.forgotPassword}
               </button>
             </div>
           </form>
         </div>
-        {/* <Toaster /> */}
-        {userState.isAuthenticated && console.log('Sign In')}
+        {isAuthenticated && console.log('Sign In')}
         {type !== '' && <ForgetPassword />}
       </Background>
     </>
