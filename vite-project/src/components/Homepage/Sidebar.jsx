@@ -1,6 +1,6 @@
 import SidebarField from '../../common/SidebarField'
 import { IconPack } from '../../constants/IconPack.js'
-import { PATH_COURSES, PATH_DASHBOARD, PATH_USERMANAGEMENT } from '../../constants/RouteConstants.jsx'
+import { PATH_COURSES, PATH_DASHBOARD, PATH_USERMANAGEMENT } from '../../constants/RouteConstants'
 import { Strings } from '../../constants/Strings'
 
 const Sidebar = () => {

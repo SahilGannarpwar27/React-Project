@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://skill-sync-be-dev-c4b597280ca7.herokuapp.com/api/admin-panel";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const API_ENDPOINTS = {
   SIGNUP: `${API_BASE_URL}/signup/`,

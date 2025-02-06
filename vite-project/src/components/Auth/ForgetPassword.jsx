@@ -7,10 +7,10 @@ import { Link, useNavigate } from 'react-router'
 
 import { forgetPasswordUser } from '../../Redux/Slice/SignInSlice'
 import { openModal } from '../../Redux/Slice/ModalSlice'
-import { IconPack } from '../../constants/IconPack.js'
-import { PATH_LOGIN, PATH_RESETPASSWORD } from '../../constants/RouteConstants.jsx'
-import { Strings } from '../../constants/Strings.jsx'
-
+import { IconPack } from '../../constants/IconPack'
+import { PATH_LOGIN, PATH_RESETPASSWORD } from '../../constants/RouteConstants'
+import { Strings } from '../../constants/Strings'
+import InputField from '../../common/InputField'
 
 const ForgetPassword = () => {
   const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const ForgetPassword = () => {
       console.log(response?.data)
       if (response) {
         dispatch(openModal('Emailsent'))
-        toast.success(response?.data?.message)
+        toast.success(response?.message)
       }
     } catch (errorMessage) {
       console.log(errorMessage)
@@ -77,26 +77,24 @@ const ForgetPassword = () => {
                 alt="close"
               />
             )}
-
             <div className="text-center mt-2">
               {/* ForgotPassword Section */}
               {type === 'ForgetPassword' && (
                 <>
                   <img className="mx-auto mb-4" src={IconPack.forgotPassword} alt="forgotPassword" />
                   <p className="text-lg text-gray-700 mb-4">{Strings.emailLink}</p>
-                  <input
-                    className="block w-full p-3 mb-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="email"
+                  <InputField
+                    type="Enter Email"
                     placeholder="Enter Email"
-                    {...register('email', {
+                    register={register('email', {
                       required: 'This field is required',
                       pattern: {
                         value: /^\S+@\S+$/i,
                         message: 'Enter a valid email address with an "@" symbol, a domain name, and no spaces.',
                       },
                     })}
+                    error={errors.email}
                   />
-                  <p className="text-red-600">{errors.email?.message}</p>
                   {!errors.email && userEmailError && <p className="text-red-600">{Strings.emailNotExist}</p>}
                   {/* Send Button */}
                   <button

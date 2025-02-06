@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import toast from 'react-hot-toast'
 import { useSearchParams } from 'react-router'
@@ -9,7 +9,7 @@ import InputField from '../../common/InputField'
 import ResetSuccessful from './ResetSuccessful'
 import usePasswordToggle from '../../hooks/usePasswordToggle'
 import Background from '../../common/Background'
-import { resetPasswordUser, setAuthData } from '../../Redux/Slice/SignInSlice'
+import { resetPasswordUser } from '../../Redux/Slice/SignInSlice'
 import { Strings } from '../../constants/Strings'
 
 const ResetPassword = () => {
@@ -51,14 +51,6 @@ const ResetPassword = () => {
       toast.error(errormessage)
     }
   }
-
-  useEffect(() => {
-    const data = {
-      uidb64: uidb64,
-      token: token,
-    }
-    dispatch(setAuthData(data))
-  }, [dispatch, searchParams, token, uidb64])
 
   return (
     <>

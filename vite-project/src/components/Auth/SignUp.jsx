@@ -99,7 +99,7 @@ const SignUp = () => {
               })}
               error={errors.role}
             >
-              <option value="" disabled>
+              <option value="" >
                 Select Role
               </option>
               <option value="CHA6xgL">HR</option>
