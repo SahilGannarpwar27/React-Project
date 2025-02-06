@@ -22,8 +22,6 @@ const TestInfo2 = () => {
     editingOption,
     localTest,
     register,
-    // eslint-disable-next-line no-unused-vars
-    formValues,
   ] = useTestFunctionality(currentTest)
 
   const handleSave = () => {

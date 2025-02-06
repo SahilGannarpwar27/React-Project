@@ -12,15 +12,15 @@
 }
 
 .btn-primary {
-  @apply border border-custom-green text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer;
+  @apply border border-custom-green text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer disabled:cursor-wait disabled:opacity-50;
 }
 
 .btn-secondary {
-  @apply border border-custom-green text-black py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer;
+  @apply border border-custom-green text-black py-2 px-4 rounded-sm mt-2 mb-2 mr-7 cursor-pointer disabled:cursor-wait disabled:opacity-50;
 }
 
 .btn-ternary {
-  @apply text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 bg-custom-green cursor-pointer;
+  @apply text-white font-bold py-2 px-4 rounded-sm mt-2 mb-2 bg-custom-green cursor-pointer disabled:cursor-wait disabled:opacity-50;
 
 }
 

@@ -50,7 +50,6 @@ const CourseDetailsForm = ({ register, isEditMode }) => {
 }
 
 CourseDetailsForm.propTypes = {
-  register: PropTypes.object,
   isEditMode: PropTypes.bool,
 }
 

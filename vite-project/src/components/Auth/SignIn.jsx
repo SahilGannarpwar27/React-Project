@@ -16,7 +16,7 @@ import { Strings } from '../../constants/Strings'
 import { PATH_SIGNUP, PATH_DASHBOARD } from '../../constants/RouteConstants'
 
 const SignIn = () => {
-  const [isinvalidError, setIsInvalidError] = useState(null)
+  const [isInvalidError, setIsInvalidError] = useState(null)
   const isAuthenticated = useSelector((state) => state?.signIn?.isAuthenticated)
   const { type } = useSelector((state) => state.modal)
   const dispatch = useDispatch()
@@ -81,7 +81,9 @@ const SignIn = () => {
               togglePasswordVisibility={togglePasswordVisibility}
               showPassword={showPassword}
             />
-            {!errors.password && isinvalidError && <p className="text-red-600">{Strings.invalidEmailPassword}</p>}
+            
+            {!errors.password && isInvalidError && <p className="text-red-600">{isInvalidError}</p>}
+
             <div className="flex justify-between items-center">
               <div className="flex flex-col items-end mr-auto">
                 <button type="submit" disabled={isSubmitting} className="btn-primary">

@@ -1,24 +1,21 @@
 import { useEffect, useState } from 'react'
-
 import { Route, Routes } from 'react-router'
 
-import ResetPassword from './components/Auth/ResetPassword'
-import SignIn from './components/Auth/SignIn'
-import SignUp from './components/Auth/SignUp'
-
-import Shimmer from './common/Shimmer'
-import ProtectedRoute from './components/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
-import { PATH_ADDNEWCOURSE, PATH_COURSEDETAILS, PATH_COURSES, PATH_DASHBOARD, PATH_LOGIN,PATH_RESETPASSWORD, PATH_SIGNUP, PATH_USERMANAGEMENT } from './constants/RouteConstants'
 
 import './App.css'
+import Shimmer from './common/Shimmer'
+import NotFound from './common/NotFound'
+import SignUp from './components/Auth/SignUp'
+import SignIn from './components/Auth/SignIn'
+import ProtectedRoute from './components/ProtectedRoute'
+import ResetPassword from './components/Auth/ResetPassword'
 import Dashboard from './components/Homepage/Dashboard'
 import Courses from './components/Homepage/Courses/Courses'
 import UserManagement from './components/Homepage/UserManagement'
 import AddNewCourse from './components/Homepage/Courses/AddNewCourse'
-import NotFound from './common/NotFound'
 import CourseDetails from './components/Homepage/Courses/CourseDetails/CourseDetails'
-import ResetPasswordRedirect from './components/Auth/ResetPasswordRedirect'
+import { PATH_ADDNEWCOURSE, PATH_COURSEDETAILS, PATH_COURSES, PATH_DASHBOARD, PATH_LOGIN,PATH_RESETPASSWORD, PATH_SIGNUP, PATH_USERMANAGEMENT } from './constants/RouteConstants'
 
 function App() {
   const [isLoaded, setIsloaded] = useState(false)

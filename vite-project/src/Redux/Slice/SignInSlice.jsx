@@ -9,10 +9,12 @@ import { API_ENDPOINTS } from '../../constants/APIConstants'
 export const signInUser = createAsyncThunk('signIn/signInUser', async (formValues, { rejectWithValue }) => {
   try {
     const response = await axios.post(API_ENDPOINTS.LOGIN, formValues)
+    console.log('response?.data: ', response?.data);
     return response?.data
   } catch (error) {
+    console.log('error: ', error);
     console.log(error?.response?.data?.detail)
-    return rejectWithValue(error?.response?.data?.detail || 'Invalid Email or Password')
+    return rejectWithValue(error?.response?.data?.detail || error?.message)
   }
 })
 
@@ -23,6 +25,7 @@ export const signUpUser = createAsyncThunk('signIn/signUpUser', async (formValue
     return response?.data
   } catch (error) {
     console.log(error)
+    console.log('error?.response?.data?.email: ', error?.response?.data?.email);
     return rejectWithValue(error?.response?.data?.email || error?.message)
   }
 })
@@ -33,7 +36,7 @@ export const forgetPasswordUser = createAsyncThunk(
     try {
       const response = await axios.post(API_ENDPOINTS.FORGOT_PASSWORD, { ...formValues })
       console.log(response)
-      return response
+      return response?.data
     } catch (error) {
       console.log(error)
       return rejectWithValue(error?.response?.data?.email || error.message || 'No account exists for this email.')
@@ -46,7 +49,7 @@ export const resetPasswordUser = createAsyncThunk(
     try {
       const response = await axios.post(API_ENDPOINTS.RESET_PASSWORD, { uidb64, ...formValues }, { headers })
       console.log(response)
-      return response
+      return response?.data
     } catch (error) {
       console.log(error)
       return rejectWithValue(error?.response?.data?.message || error.message)
@@ -57,7 +60,7 @@ const SignInSlice = createSlice({
   name: 'signIn',
   initialState: {
     stateUsers: [...Users],
-    isAuthenticated: false,
+    isAuthenticated: true,
     user: null,
     error: null,
     authData: null,
@@ -73,6 +76,7 @@ const SignInSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false
       state.user = null
+      state.authData = null
     },
   },
 
@@ -85,7 +89,9 @@ const SignInSlice = createSlice({
       .addCase(signInUser.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.isAuthenticated = true
-        state.user = action.payload
+        state.authData = action.payload
+        console.log('state.authData: ', state.authData);
+        
         state.error = null
       })
       .addCase(signInUser.rejected, (state, action) => {

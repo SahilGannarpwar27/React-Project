@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { logout } from '../../Redux/Slice/SignInSlice'
 import { IconPack } from '../../constants/IconPack.js'
 import { Strings } from '../../constants/Strings'
-import { PATH_LOGIN } from '../../constants/RouteConstants.jsx'
+import { PATH_LOGIN } from '../../constants/RouteConstants'
 
 const Header = () => {
   const dispatch = useDispatch()

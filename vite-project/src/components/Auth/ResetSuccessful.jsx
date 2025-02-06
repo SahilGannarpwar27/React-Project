@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'
 import { openModal } from '../../Redux/Slice/ModalSlice';
 import { IconPack } from '../../constants/IconPack.js';
 import { Strings } from '../../constants/Strings';
+import { PATH_LOGIN } from '../../constants/RouteConstants.js';
 
 // eslint-disable-next-line react/prop-types
 const ResetSuccessful = ({ show }) => {
@@ -16,7 +17,7 @@ const ResetSuccessful = ({ show }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSignIn = () => {
     dispatch(openModal(""))
-    navigate('/login', { replace: true })
+    navigate(PATH_LOGIN, { replace: true })
   };
 
   // Scenario : used useEffect for timer , after completion of timer , navigate to sign in page
