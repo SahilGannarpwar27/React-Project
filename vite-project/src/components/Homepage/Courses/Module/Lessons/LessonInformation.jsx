@@ -3,13 +3,12 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Strings } from '../../../../constants/Strings'
-import InputFieldSecondary from '../../../../common/InputFieldSecondary'
-import { editLesson } from '../../../../Redux/Slice/CoursesSlice'
+import InputFieldSecondary from '../../../../../common/InputFieldSecondary'
+import { Strings } from '../../../../../constants/Strings'
+import { editLesson } from '../../../../../Redux/Slice/CoursesSlice'
 
 const LessonInfo = () => {
   const dispatch = useDispatch()
-  // const currentModule = useSelector((state) => state.courses.currentModule)
   const currentLesson = useSelector((state) => state.courses.currentLesson)
   const showTest = useSelector((state) => state.courses.showTest)
   const { register, handleSubmit, watch, reset } = useForm({

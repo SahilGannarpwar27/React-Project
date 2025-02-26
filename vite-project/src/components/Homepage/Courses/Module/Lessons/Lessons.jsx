@@ -1,13 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { addLesson, setCurrentLesson, setShowModal, setShowTest } from '../../../../Redux/Slice/CoursesSlice'
-import { IconPack } from '../../../../constants/IconPack.js'
-import { Strings } from '../../../../constants/Strings'
+import { addLesson, setCurrentLesson, setShowModal, setShowTest } from '../../../../../Redux/Slice/CoursesSlice.jsx'
+import { IconPack } from '../../../../../constants/IconPack.js'
+import { Strings } from '../../../../../constants/Strings.js'
 
 const Lessons = () => {
   const dispatch = useDispatch()
-  const currentModule = useSelector((state) => state.courses.currentModule)
-  const currentLesson = useSelector((state) => state.courses.currentLesson)
-  const showTest = useSelector((state) => state.courses.showTest)
+  const currentModule = useSelector((state) => state?.courses?.currentModule)
+  const currentLesson = useSelector((state) => state?.courses?.currentLesson)
+  const showTest = useSelector((state) => state?.courses?.showTest)
 
   const handleLessonClick = (lesson) => {
     dispatch(setCurrentLesson(lesson))
@@ -52,13 +52,13 @@ const Lessons = () => {
           <ul className="w-full">
             {currentModule?.lessons?.map((lesson) => (
               <li
-                key={lesson.lesson_id}
+                key={lesson?.lesson_id}
                 className={`mb-4 p-3 border-l-2 flex justify-between items-center cursor-pointer group hover:bg-opacity-90 ${currentLesson?.lesson_id === lesson.lesson_id && showTest === false ? 'bg-green-100 border-green-400' : 'bg-gray-100 border-gray-400'}`}
                 onClick={() => handleLessonClick(lesson)}
               >
                 <div className="min-w-0 flex-1 mr-2">
-                  <p className="text-[10px] sm:text-xs lg:text-sm truncate transition-all">{`Lesson ${lesson.sequence}`}</p>
-                  <p className="text-xs sm:text-sm lg:text-base truncate transition-all">{lesson.lesson_name}</p>
+                  <p className="text-[10px] sm:text-xs lg:text-sm truncate transition-all">{`Lesson ${lesson?.sequence}`}</p>
+                  <p className="text-xs sm:text-sm lg:text-base truncate transition-all">{lesson?.lesson_name}</p>
                 </div>
                 <img src={IconPack.trashIcon} alt="trash-icon" className="size-4 sm:w-4 sm:h-4 cursor-pointer flex-shrink- opacity-70 group-hover:opacity-100" onClick={(e) => handleDelete(e ,lesson)} />
               </li>

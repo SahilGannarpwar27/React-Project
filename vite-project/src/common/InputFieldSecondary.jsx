@@ -1,7 +1,4 @@
-
-// Scenario : custom inputfield for Courses Section
-import PropTypes from "prop-types"
-
+import PropTypes from 'prop-types'
 
 const InputFieldSecondary = ({ className, htmlFor, value, type, id, register, children, rows, cols }) => {
   return (
@@ -30,15 +27,22 @@ const InputFieldSecondary = ({ className, htmlFor, value, type, id, register, ch
 }
 
 InputFieldSecondary.propTypes = {
-  className : PropTypes.string,
-  htmlFor : PropTypes.string.isRequired,
-  value : PropTypes.string.isRequired,
-  type : PropTypes.oneOf(['text' , 'textarea', 'select']).isRequired,
-  id : PropTypes.string.isRequired,
-  register : PropTypes.object.isRequired,
-  children : PropTypes.node,
+  className: PropTypes.string,
+  htmlFor: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['text', 'textarea', 'select']).isRequired,
+  id: PropTypes.string.isRequired,
+  register: PropTypes.object.isRequired,
+  children: PropTypes.node,
   rows: PropTypes.number,
   cols: PropTypes.number,
+}
+
+InputFieldSecondary.defaultProps = {
+  className: '',
+  children: null,
+  rows: 4,
+  cols: 50,
 }
 
 export default InputFieldSecondary

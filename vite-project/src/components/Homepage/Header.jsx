@@ -15,7 +15,6 @@ const Header = () => {
   // Reset authentication state on page load or navigation back to sign-in and Clear any errors
   const handleLogout = () => {
     dispatch(logout())
-    // dispatch(resetErrors())
     navigate(PATH_LOGIN)
     toast.success('Logged Out Successfully')
   }

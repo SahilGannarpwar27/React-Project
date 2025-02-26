@@ -6,7 +6,7 @@ import { setIsEditMode, setShowModal } from '../../../../Redux/Slice/CoursesSlic
 const CourseDetailsSection = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { currentCourse } = useSelector((state) => state.courses)
+  const { currentCourse } = useSelector((state) => state?.courses)
 
   //Opens modal to delete the course
   const handleDelete = () => {
@@ -23,9 +23,9 @@ const CourseDetailsSection = () => {
       <div className=" flex justify-between items-center mb-4">
         <span
           className={
-            currentCourse.status === 'Draft'
+            currentCourse?.status === 'Draft'
               ? 'btn-draft'
-              : currentCourse.status === 'Active'
+              : currentCourse?.status === 'Active'
                 ? 'btn-active'
                 : 'btn-Inactive'
           }

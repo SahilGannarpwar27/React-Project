@@ -45,6 +45,7 @@ export const Strings = {
   status: 'Status',
   courseDuration: 'Course duration',
   yes: 'Yes',
+  confirm : 'Confirm',
   addModulemsg: 'Add Module To Display Lessons',
   addLesson: 'Add lesson',
   test: 'Test',
@@ -54,5 +55,8 @@ export const Strings = {
   singleChoice: 'Single choice',
   addOption: 'Add option',
   addQuestion: 'Add Question',
-  courseDetails: "Course Details"
+  courseDetails: "Course Details",
+  redirectToSignIn:"You will be redirected to the sign-in page in 10 seconds.",
+  confirmDelete: "Confirm Delete",
+  userDetails : "User Details",
 }

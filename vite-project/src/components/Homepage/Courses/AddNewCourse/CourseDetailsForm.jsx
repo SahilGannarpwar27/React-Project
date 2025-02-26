@@ -1,3 +1,4 @@
+import CoursesInputField from '../../../../common/CoursesInputField'
 import InputFieldSecondary from '../../../../common/InputFieldSecondary'
 import { Strings } from '../../../../constants/Strings'
 import PropTypes from 'prop-types'
@@ -6,14 +7,21 @@ const CourseDetailsForm = ({ register, isEditMode }) => {
   return (
     <form>
       <div className="flex items-start space-x-4">
-        <InputFieldSecondary
+        <CoursesInputField
+          className="w-1/3"
+          htmlFor="Title"
+          value={Strings.title}
+          id="Title"
+          register={register('title')}
+        />
+        {/* <InputFieldSecondary
           className="w-1/3"
           htmlFor="Title"
           value={Strings.title}
           type="text"
           id="Title"
           register={register('title')}
-        />
+        /> */}
         <InputFieldSecondary
           className="w-1/3"
           htmlFor="Category"
@@ -51,6 +59,7 @@ const CourseDetailsForm = ({ register, isEditMode }) => {
 
 CourseDetailsForm.propTypes = {
   isEditMode: PropTypes.bool,
+  register: PropTypes?.object?.isRequired,
 }
 
 export default CourseDetailsForm
