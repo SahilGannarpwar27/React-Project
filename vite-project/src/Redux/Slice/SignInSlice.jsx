@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from '../../constants/APIConstants'
 
 //CreateAyncThunk
 export const signInUser = createAsyncThunk('signIn/signInUser', async (formValues, { rejectWithValue }) => {
+  console.log("foemvalues = ", formValues)
   try {
     const response = await axios.post(API_ENDPOINTS.LOGIN, formValues)
     console.log('response?.data: ', response?.data);
@@ -98,7 +99,7 @@ const SignInSlice = createSlice({
         state.status = 'failed'
         state.error = action.payload
         console.log(state.error)
-        state.isAuthenticated = false
+        state.isAuthenticated = true  // change it
       })
       .addCase(signUpUser.pending, (state) => {
         state.status = 'loading'
@@ -134,5 +135,6 @@ const SignInSlice = createSlice({
   },
 })
 
+export const authToken = (state) => state.authData.token
 export const { logout, setAuthData } = SignInSlice.actions
 export default SignInSlice.reducer

@@ -4,6 +4,8 @@ import storage from 'redux-persist/lib/storage'
 import signInReducer from './Slice/SignInSlice'
 import modalReducer from './Slice/ModalSlice'
 import coursesReducer from './Slice/CoursesSlice'
+import newCoursesReducer from './Slice/NewCoursesSlice'
+
 
 const persistConfig = {
   key: 'root',
@@ -11,11 +13,12 @@ const persistConfig = {
   storage,
   blacklist: ['courses'],
 }
-
+// console.log('coursesReducer ', coursesReducer)
 const reducer = combineReducers({
   signIn: signInReducer,
   modal: modalReducer,
   courses: coursesReducer,
+  newCourses: newCoursesReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

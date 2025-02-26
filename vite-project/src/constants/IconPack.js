@@ -26,5 +26,9 @@ export const IconPack = {
     cross : "/Skillsync-img/cross.svg",
     addTrainingGreen : "/Skillsync-img/add-training-green.png",
     greenTick:"/Skillsync-img/greenTick.svg",
-    singleChoice:"/Skillsync-img/singleChoice.svg"
+    singleChoice:"/Skillsync-img/singleChoice.svg",
+    userImage:"/Skillsync-img/userImage.png",
+    accordionDown:"/Skillsync-img/accordionDown.svg",
+    accordionRight:"/Skillsync-img/accordionRight.svg"
+    
 }

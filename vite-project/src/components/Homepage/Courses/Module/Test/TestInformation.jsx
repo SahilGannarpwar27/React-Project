@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import InputFieldSecondary from '../../../../../common/InputFieldSecondary'
-import useTestFunctionality from '../../../../../hooks/useTestFunctionality'
+import InputFieldSecondary from '../../../../../common/InputFieldSecondary.jsx'
+import useTestFunctionality from '../../../../../hooks/useTestFunctionality.jsx'
+import { Strings } from '../../../../../constants/Strings.js'
 import { IconPack } from '../../../../../constants/IconPack.js'
-import { Strings } from '../../../../../constants/Strings'
-import { updateTest } from '../../../../../Redux/Slice/CoursesSlice'
+import { updateTest } from '../../../../../Redux/Slice/CoursesSlice.jsx'
 
 const TestInfo2 = () => {
   const dispatch = useDispatch()
-  const showTest = useSelector((state) => state.courses.showTest)
-  const currentTest = useSelector((state) => state.courses.currentModule.test)
+  const showTest = useSelector((state) => state?.courses?.showTest)
+  const currentTest = useSelector((state) => state?.courses?.currentModule?.test)
 
   //Scenario :  Used custom hooks to maintain functionalities
   const [
@@ -47,8 +47,8 @@ const TestInfo2 = () => {
                     htmlFor={`question-${q.question_id}`}
                     value="Question"
                     type="textarea"
-                    id={`question-${q.question_id}`}
-                    register={register(`description-${q.question_id}`)}
+                    id={`question-${q?.question_id}`}
+                    register={register(`description-${q?.question_id}`)}
                     rows={2}
                     cols={20}
                   />

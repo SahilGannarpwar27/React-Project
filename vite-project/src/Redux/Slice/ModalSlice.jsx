@@ -4,6 +4,7 @@ const ModalSlice = createSlice({
     name : "ModalSlice",
     initialState: {
         type : "",
+        formType : 'signIn',
     },
 
     reducers: {
@@ -12,9 +13,19 @@ const ModalSlice = createSlice({
             state.type = modalType;
             console.log(state.type);
         },
-    }
-})
+        changeFormType: (state, action) => {
+            const type = action.payload
+            state.formType = type
+            console.log('state.formType: ', state.formType);
 
-export const {openModal} = ModalSlice.actions
+        }
+
+
+    }
+});
+
+console.log('Initial ModalSlice state:', ModalSlice.getInitialState());
+
+export const {openModal , changeFormType} = ModalSlice.actions
 
 export default ModalSlice.reducer;

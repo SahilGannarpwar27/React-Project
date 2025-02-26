@@ -1,6 +1,17 @@
 import toast from 'react-hot-toast'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid'
+// import API from '../../api/Api'
+
+// export const coursesList = createAsyncThunk('courses/coursesList', async () => {
+//   try {
+//     const response = await API.get('/course-list/')
+//     console.log("response slice : ", response)
+//     return response?.data?.results || []
+//   } catch (error) {
+//     return error
+//   }
+// })
 
 const CoursesSlice = createSlice({
   name: 'courses',
@@ -13,6 +24,8 @@ const CoursesSlice = createSlice({
     showModalType: '',
     showTest: false,
     isEditMode: false,
+    status: 'idle',
+    error: null,
   },
   reducers: {
     addCourse: (state, action) => {
@@ -192,15 +205,15 @@ const CoursesSlice = createSlice({
     },
 
     editCourse: (state, action) => {
-      const updatedCourse = action.payload;
-      const courseIndex = state.courses.findIndex((course) => course.course_id === updatedCourse.course_id);
-    
+      const updatedCourse = action.payload
+      const courseIndex = state.courses.findIndex((course) => course.course_id === updatedCourse.course_id)
+
       if (courseIndex !== -1) {
-        state.courses[courseIndex] = { ...state.courses[courseIndex], ...updatedCourse };
-        state.currentCourse = state.courses[courseIndex];
-        toast.success('Course updated successfully!');
+        state.courses[courseIndex] = { ...state.courses[courseIndex], ...updatedCourse }
+        state.currentCourse = state.courses[courseIndex]
+        toast.success('Course updated successfully!')
       } else {
-        toast.error('Course not found!');
+        toast.error('Course not found!')
       }
     },
 
@@ -310,12 +323,30 @@ const CoursesSlice = createSlice({
     },
     changeStatus: (state) => {
       const targetCourse = state.courses?.find((c) => c.course_id === state.currentCourse?.course_id)
-      if(targetCourse){
+      if (targetCourse) {
         targetCourse.status = 'Active'
         state.currentCourse.status = 'Active'
       }
     },
   },
+
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(coursesList?.pending, (state) => {
+  //       state.status = 'loading'
+  //       state.error = null
+  //     })
+  //     .addCase(coursesList?.fulfilled, (state) => {
+  //       console.log('Succeed ')
+  //       state.status = 'succeeded'
+  //       state.error = null
+  //     })
+  //     .addCase(coursesList?.rejected, (state, action) => {
+  //       state.status = 'failed'
+  //       state.error = action.error.message
+  //       console.log(state.error)
+  //     })
+  // },
 })
 
 export const {

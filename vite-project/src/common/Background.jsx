@@ -1,7 +1,7 @@
 import { IconPack } from "../constants/IconPack.js"
+import PropTypes from "prop-types"
 
 //Scenario : Background for Auth Section
-// eslint-disable-next-line react/prop-types
 const Background = ({children}) => {
   return (
     <div className="overflow-hidden w-full  bg-cover bg-center bg-no-repeat bg-[url('/Skillsync-img/authBackground.svg')]">
@@ -12,5 +12,8 @@ const Background = ({children}) => {
     </div>
   )
 }
+Background.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Background

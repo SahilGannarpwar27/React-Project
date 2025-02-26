@@ -1,4 +1,4 @@
-
+import PropTypes from 'prop-types'
 import { NavLink } from 'react-router'
 
 const SidebarField = ({ path, imgsrc, string }) => {
@@ -17,6 +17,12 @@ const SidebarField = ({ path, imgsrc, string }) => {
       </NavLink>
     </li>
   )
+}
+
+SidebarField.propTypes = {
+  path: PropTypes.string.isRequired,
+  imgsrc: PropTypes.string.isRequired,
+  string: PropTypes.string.isRequired,
 }
 
 export default SidebarField

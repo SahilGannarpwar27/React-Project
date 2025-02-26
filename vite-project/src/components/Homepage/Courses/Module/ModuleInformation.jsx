@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { addModule, setCurrentModule, setShowModal } from '../../../../Redux/Slice/CoursesSlice'
+
+import { addModule, setCurrentModule, setShowModal } from '../../../../Redux/Slice/CoursesSlice.jsx'
 import { IconPack } from '../../../../constants/IconPack.js'
-import { Strings } from '../../../../constants/Strings'
+import { Strings } from '../../../../constants/Strings.js'
 
 const ModuleInfo = () => {
   const currentCourse = useSelector((state) => state.courses.currentCourse)
@@ -36,11 +37,11 @@ const ModuleInfo = () => {
       <ul className="flex space-x-8 overflow-x-auto min-w-0 scrollbar-hide h-full">
         {currentCourse.modules.map((module) => (
           <li
-            className={`flex items-center cursor-pointer ${module.module_id === currentModule.module_id && 'border-b-2 border-custom-green text-custom-green'}`}
-            key={module.module_id}
+            className={`flex items-center cursor-pointer ${module?.module_id === currentModule?.module_id && 'border-b-2 border-custom-green text-custom-green'}`}
+            key={module?.module_id}
             onClick={() => handleModuleClick(module)}
           >
-            <span className="mr-2">{module.module_name}</span>
+            <span className="mr-2">{module?.module_name}</span>
             <img
               src={IconPack.editModule}
               alt="edit-module"

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import DropDown2 from './DropDown2'
-import NewModal from '../Module/NewModal'
+import CoursesSectionModals from '../CoursesSectionModals.jsx'
 import { Strings } from '../../../../constants/Strings'
 import CourseDetailsSection from './CourseDetailsSection.jsx'
 import ButtonField from '../../../../common/ButtonField.jsx'
@@ -44,11 +44,10 @@ const CourseDetails = () => {
           <li>Assignees</li>
         </ul>
         <div className="flex flex-1 pt-4">
-          {/* <DropDown /> */}
           <DropDown2 />
         </div>
       </div>
-      {showModalType !== '' && <NewModal />}
+      {showModalType !== '' && <CoursesSectionModals />}
     </div>
   )
 }

@@ -1,73 +1,91 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router'
-import { IconPack } from '../../../constants/IconPack.js'
-import { Strings } from '../../../constants/Strings'
-import { setCurrentCourse } from '../../../Redux/Slice/CoursesSlice'
+
 import Pagination from 'rc-pagination'
-import 'rc-pagination/assets/index.css'
 import { useForm } from 'react-hook-form'
+import { Outlet, useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Strings } from '../../../constants/Strings'
+import { IconPack } from '../../../constants/IconPack.js'
+import { setCurrentCourse, setShowModal } from '../../../Redux/Slice/CoursesSlice'
+import { PATH_ADDNEWCOURSE, PATH_COURSEDETAILS } from '../../../constants/RouteConstants.js'
+import 'rc-pagination/assets/index.css'
+import API from '../../../api/Api.js'
+import CoursesSectionModals from './CoursesSectionModals.jsx'
 
 const Courses = () => {
-  const { register,watch } = useForm({
-    defaultValues: {
-      entries : 2,
-    },
-  })
-  
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { showModalType, status } = useSelector((state) => state?.courses)
 
-  const courses = useSelector((state) => state.courses.courses)
-  // const currentCourse = useSelector((state) => state.courses.currentCourse)
-  // console.log('currentCourse ', currentCourse)
-  const isEditMode = useSelector((state) => state.courses.isEditMode)
-  console.log(isEditMode)
-
-  const [copyCourses, setCopyCourses] = useState(courses)
-  const [selectedStatus, setSelectedstatus] = useState('')
-
-  // For Pagination
-
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(2)
-  const totalItems = copyCourses.length
-  console.log(totalItems)
-  const currentItems = copyCourses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-  const onPageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
-
-  const entries = watch('entries')
-
-  useEffect(() => {
-    setItemsPerPage(entries)
-  }, [entries])
-
-  //To filter status
-  const handleFilter = (e) => {
-    const status = e.target.value
-    console.log(status)
-    setSelectedstatus(status)
-    if (status) {
-      setCopyCourses(courses.filter((course) => course.status === status))
-    } else {
-      setCopyCourses(courses)
-    }
-    setCurrentPage(1) // Reset to the first page
-  }
+  const [copyCourses, setCopyCourses] = useState([])
+  console.log('length :', copyCourses.length)
+  const { register, watch } = useForm({
+    defaultValues: {
+      entries: 6,
+    },
+  })
 
   const handleAddNew = () => {
-    navigate('/courses/add-new-course', { replace: false })
+    navigate(PATH_ADDNEWCOURSE, { replace: false })
   }
-
-  // Scenario : To navigate to course Details of currentCourse
 
   const handleCourseClick = (course) => {
     console.log('course ', course)
     dispatch(setCurrentCourse(course))
-    navigate('/courses/course-details', { replace: false })
+    navigate(PATH_COURSEDETAILS, { replace: false })
   }
+
+  const handleShowFilter = () => {
+    dispatch(setShowModal('filterCourses'))
+  }
+
+  // For Pagination
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(2)
+  const totalItems = copyCourses?.length
+  const currentItems = copyCourses?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const entries = watch('entries')
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+
+  const fetchData = async () => {
+    // try {
+    //   const response = dispatch(coursesList()).unwrap()
+    //   if (response) {
+    //     setCopyCourses(response)
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    const response = await API.get('/course-list/')
+    console.log(response)
+    setCopyCourses(response?.data?.results || [])
+  }
+
+  // useEffect(() => {
+  //   setItemsPerPage(entries)
+  // }, [entries])
+
+  // useEffect(() => {
+  //   console.log('In useEffect')
+  //   try {
+  //     const response = dispatch(coursesList()).unwrap()
+  //     console.log('response ', response)
+  //     if (response) {
+  //       console.log("response courses ", response)
+  //       setCopyCourses(response)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }, [dispatch]).
+
+  useEffect(() => {
+    fetchData();
+    
+  },[])
 
   return (
     <div className="pt-2">
@@ -82,12 +100,12 @@ const Courses = () => {
           />
 
           {/* Filter */}
-          <select value={selectedStatus} onChange={handleFilter}>
-            <option value="">{Strings.all}</option>
-            <option value="Draft">{Strings.draft}</option>
-            <option value="Inactive">{Strings.inactive}</option>
-            <option value="Active">{Strings.active}</option>
-          </select>
+          <img
+            src={IconPack.filter}
+            alt="filter"
+            className="bg-white p-2 border border-gray-300 cursor-pointer"
+            onClick={handleShowFilter}
+          />
         </div>
         {/* Add New Button */}
         <button onClick={handleAddNew} className="btn-secondary">
@@ -95,7 +113,6 @@ const Courses = () => {
         </button>
       </div>
       {/* Table of Courses */}
-      {/* Conditional Rendering */}
       {copyCourses.length === 0 ? (
         <div className="bg-white p-4 rounded shadow-md flex flex-col items-center space-y-4">
           <h1>{Strings.tableEmpty}</h1>
@@ -132,20 +149,20 @@ const Courses = () => {
                 <tr key={index} className="hover:bg-gray-50 cursor-pointer" onClick={() => handleCourseClick(course)}>
                   <td className="border-b p-2 truncate">{course.course_title}</td>
                   <td className="border-b p-2 truncate">{course.is_mandatory ? 'Yes' : 'No'}</td>
-                  <td className="border-b p-2 truncate">{course.category}</td>
-                  <td className="border-b p-2 truncate">{course.assignee}</td>
+                  <td className="border-b p-2 truncate">{course.category_name}</td>
+                  <td className="border-b p-2 truncate">{course.no_of_assignee}</td>
                   <td className="border-b p-2 truncate">{course.duration}</td>
                   <td className="border-b p-4 truncate">
                     <span
                       className={
-                        course.status === 'Draft'
+                        course.status === 'draft'
                           ? 'btn-draft'
-                          : course.status === 'Active'
+                          : course.status === 'active'
                             ? 'btn-active'
                             : 'btn-Inactive'
                       }
                     >
-                      {course.status}
+                      {course?.status}
                     </span>
                   </td>
                 </tr>
@@ -162,8 +179,31 @@ const Courses = () => {
         </div>
       )}
       <Outlet />
+      {showModalType !== '' && <CoursesSectionModals />}
     </div>
   )
 }
 
 export default Courses
+
+//To filter status
+// const handleFilter = (e) => {
+//   const status = e.target.value
+//   console.log(status)
+//   setSelectedstatus(status)
+//   if (status) {
+//     setCopyCourses(courses.filter((course) => course.status === status))
+//   } else {
+//     setCopyCourses(courses)
+//   }
+//   setCurrentPage(1) // Reset to the first page
+// }
+
+{
+  /* <select value={selectedStatus} onChange={handleFilter}>
+            <option value="">{Strings.all}</option>
+            <option value="Draft">{Strings.draft}</option>
+            <option value="Inactive">{Strings.inactive}</option>
+            <option value="Active">{Strings.active}</option>
+          </select> */
+}
