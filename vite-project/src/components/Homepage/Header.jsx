@@ -12,7 +12,6 @@ const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  // Reset authentication state on page load or navigation back to sign-in and Clear any errors
   const handleLogout = () => {
     dispatch(logout())
     navigate(PATH_LOGIN)

@@ -1,10 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { addLesson, setCurrentLesson, setShowModal, setShowTest } from '../../../../../Redux/Slice/CoursesSlice.jsx'
+import { addLesson, setCurrentLesson, setShowTest } from '../../../../../Redux/Slice/CoursesSlice.jsx'
 import { IconPack } from '../../../../../constants/IconPack.js'
 import { Strings } from '../../../../../constants/Strings.js'
+import DeleteModals from '../../../../../common/DeleteModals.jsx'
+import { useState } from 'react'
 
 const Lessons = () => {
   const dispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
   const currentModule = useSelector((state) => state?.courses?.currentModule)
   const currentLesson = useSelector((state) => state?.courses?.currentLesson)
   const showTest = useSelector((state) => state?.courses?.showTest)
@@ -21,7 +24,8 @@ const Lessons = () => {
   const handleDelete = (e, lesson) => {
     e.stopPropogation
     dispatch(setCurrentLesson(lesson))
-    dispatch(setShowModal('deleteLesson'))
+    setShowModal((prev)=> !prev)
+    // dispatch(setShowModal('deleteLesson'))
   }
 
   const openTest = () => {
@@ -74,6 +78,7 @@ const Lessons = () => {
           <p className={`mb-4 p-3 sm:p-4 border-l-2 cursor-pointer truncate  text-xs sm:text-sm lg:text-base ${showTest === true ? 'bg-green-100 border-green-400' : 'bg-gray-100 border-gray-400'}`} onClick={openTest}>{Strings.test}</p>
         </>
       )}
+      {showModal && <DeleteModals setDeleteModal={setShowModal} type='lesson' />}
     </aside>
   )
 }

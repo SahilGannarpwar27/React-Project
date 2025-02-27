@@ -11,6 +11,7 @@ import { openModal } from '../../Redux/Slice/ModalSlice'
 import { ModalStrings } from '../../constants/ModalStrings'
 import { ErrorMsgStrings } from '../../constants/ErrorMsgStrings'
 import { forgetPasswordUser } from '../../Redux/Slice/SignInSlice'
+import { ForgetPasswordFields } from '../../constants/AuthInputFields'
 
 const ForgetPasswordForm = () => {
   const dispatch = useDispatch()
@@ -24,13 +25,10 @@ const ForgetPasswordForm = () => {
   } = useForm()
 
   const emailData = watch()
-  console.log(emailData)
 
   const handleClick = async () => {
     try {
       const response = await dispatch(forgetPasswordUser(emailData)).unwrap()
-      console.log(response)
-      console.log(response?.data)
       if (response) {
         dispatch(openModal(ModalStrings.forgetPasswordEmailSent))
         toast.success(response?.message)
@@ -46,24 +44,20 @@ const ForgetPasswordForm = () => {
     <>
       <img className="mx-auto mb-4" src={IconPack.forgotPassword} alt="forgotPassword" />
       <p className="text-lg text-gray-700 mb-4">{Strings.emailLink}</p>
-      <InputField
-        type="Enter Email"
-        placeholder="Enter Email"
-        register={register('email', {
-          required: 'This field is required',
-          pattern: {
-            value: /^\S+@\S+$/i,
-            message: 'Enter a valid email address with an "@" symbol, a domain name, and no spaces.',
-          },
-        })}
-        error={errors.email}
-      />
+      {ForgetPasswordFields.map((field, index) => (
+        <InputField
+          key={index}
+          type={field.type}
+          placeholder={field.placeholder}
+          register={register(field?.name, field?.validation)}
+          error={errors[field.name]}
+        />
+      ))}
       {!errors?.email && userEmailError && <p className="text-red-600">{Strings.emailNotExist}</p>}
-      {/* Send Button */}
       <button
+        className="w-24 py-3 bg-custom-green text-white"
         onClick={handleSubmit(handleClick)}
         disabled={isSubmitting}
-        className="w-24 py-3 bg-custom-green text-white"
       >
         {!isSubmitting ? Strings.send : 'Sending'}
       </button>

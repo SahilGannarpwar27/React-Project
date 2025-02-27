@@ -10,6 +10,21 @@ export const signInInputFields = [
   },
 ]
 
+export const ForgetPasswordFields = [
+  {
+    type: 'email',
+    placeholder: 'Enter Email',
+    name: 'email',
+    validation: {
+      required: 'This field is required',
+      pattern: {
+        value: /^\S+@\S+$/i,
+        message: 'Enter a valid email address with an "@" symbol, a domain name, and no spaces.',
+      },
+    },
+  },
+]
+
 export const SignInPasswordFields = [
   {
     placeholder: 'Password',

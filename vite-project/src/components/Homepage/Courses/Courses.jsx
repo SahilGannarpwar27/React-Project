@@ -5,19 +5,19 @@ import { useForm } from 'react-hook-form'
 import { Outlet, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
+import API from '../../../api/Api.js'
+import FilterCourseModal from '../../../common/FilterCourseModal.jsx'
 import { Strings } from '../../../constants/Strings'
 import { IconPack } from '../../../constants/IconPack.js'
-import { setCurrentCourse, setShowModal } from '../../../Redux/Slice/CoursesSlice'
+import { setCurrentCourse } from '../../../Redux/Slice/CoursesSlice'
 import { PATH_ADDNEWCOURSE, PATH_COURSEDETAILS } from '../../../constants/RouteConstants.js'
 import 'rc-pagination/assets/index.css'
-import API from '../../../api/Api.js'
-import CoursesSectionModals from './CoursesSectionModals.jsx'
 
 const Courses = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { showModalType, status } = useSelector((state) => state?.courses)
-
+  const [showModal, setShowModal] = useState(false)
+  const { status } = useSelector((state) => state?.courses)
   const [copyCourses, setCopyCourses] = useState([])
   console.log('length :', copyCourses.length)
   const { register, watch } = useForm({
@@ -37,7 +37,7 @@ const Courses = () => {
   }
 
   const handleShowFilter = () => {
-    dispatch(setShowModal('filterCourses'))
+    setShowModal((prev) => !prev)
   }
 
   // For Pagination
@@ -83,9 +83,8 @@ const Courses = () => {
   // }, [dispatch]).
 
   useEffect(() => {
-    fetchData();
-    
-  },[])
+    fetchData()
+  }, [])
 
   return (
     <div className="pt-2">
@@ -169,6 +168,7 @@ const Courses = () => {
               ))}
             </tbody>
           </table>
+
           <div className="flex justify-between mt-2">
             <div>
               show <input type="number" value={itemsPerPage} className="w-9 pl-1 h-5" {...register('entries')} />{' '}
@@ -179,31 +179,9 @@ const Courses = () => {
         </div>
       )}
       <Outlet />
-      {showModalType !== '' && <CoursesSectionModals />}
+      {showModal && <FilterCourseModal setShowModal={setShowModal} />}
     </div>
   )
 }
 
 export default Courses
-
-//To filter status
-// const handleFilter = (e) => {
-//   const status = e.target.value
-//   console.log(status)
-//   setSelectedstatus(status)
-//   if (status) {
-//     setCopyCourses(courses.filter((course) => course.status === status))
-//   } else {
-//     setCopyCourses(courses)
-//   }
-//   setCurrentPage(1) // Reset to the first page
-// }
-
-{
-  /* <select value={selectedStatus} onChange={handleFilter}>
-            <option value="">{Strings.all}</option>
-            <option value="Draft">{Strings.draft}</option>
-            <option value="Inactive">{Strings.inactive}</option>
-            <option value="Active">{Strings.active}</option>
-          </select> */
-}

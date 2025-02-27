@@ -1,16 +1,20 @@
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { IconPack } from '../../../../constants/IconPack'
-import { setIsEditMode, setShowModal } from '../../../../Redux/Slice/CoursesSlice'
+import { setIsEditMode } from '../../../../Redux/Slice/CoursesSlice'
+import { useState } from 'react'
+import DeleteModals from '../../../../common/DeleteModals'
 
 const CourseDetailsSection = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [showModal, setShowModal] = useState(false)
   const { currentCourse } = useSelector((state) => state?.courses)
 
   //Opens modal to delete the course
   const handleDelete = () => {
-    dispatch(setShowModal('deleteCourse'))
+    setShowModal((prev)=> !prev)
+    // dispatch(setShowModal('deleteCourse'))
   }
 
   //Navigate to edit course
@@ -61,6 +65,7 @@ const CourseDetailsSection = () => {
           <p id="category">{currentCourse?.category}</p>
         </label>
       </div>
+      {showModal && <DeleteModals setDeleteModal = {setShowModal}/>}
     </div>
   )
 }
