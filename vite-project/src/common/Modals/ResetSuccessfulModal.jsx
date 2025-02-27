@@ -10,7 +10,7 @@ import { IconPack } from '../../constants/IconPack.js'
 import { openModal } from '../../Redux/Slice/ModalSlice.jsx'
 import { PATH_LOGIN } from '../../constants/RouteConstants.js'
 
-const ResetSuccessfulModal = ({ show }) => {
+const ResetSuccessfulModal = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [timer, setTimer] = useState(10)
@@ -32,7 +32,7 @@ const ResetSuccessfulModal = ({ show }) => {
 
   return (
     <>
-      <ModalBackground show={show}>
+      <ModalBackground>
         <img className="mx-auto mb-4 w-48" src={IconPack.password} alt="Password-Reset" />
         <p className="text-lg text-gray-700 mb-4">{Strings.ResetSuccessful}</p>
         <p>You will be redirected to the sign-in page in 10 seconds.</p>
@@ -51,25 +51,3 @@ ResetSuccessfulModal.propTypes = {
 
 export default ResetSuccessfulModal
 
-{
-  /* <div className={`fixed inset-0 bg-black opacity-50 z-50 ${show ? '' : 'hidden'}`}></div>{' '}
-      <div className={`fixed inset-0 flex justify-center items-center z-50 ${show ? '' : 'hidden'}`}>
-        <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-10 rounded-sm relative w-full max-w-md">
-            <div className="text-center mt-2">
-              <div className="mb-4">
-                <img className="mx-auto mb-4 w-48" src={IconPack.password} alt="Password-Reset" />
-              </div>
-              <div className="">
-                <p className="text-lg text-gray-700 mb-4">{Strings.ResetSuccessful}</p>
-                <p>{Strings.redirectToSignIn}</p>
-                <p className="pb-2 text-custom-green">00 : {timer}</p>
-                <button onClick={handleSignIn} className="w-24 py-3 bg-custom-green text-white">
-                  {Strings.signIn}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */
-}

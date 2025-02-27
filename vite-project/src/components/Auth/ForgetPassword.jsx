@@ -14,12 +14,9 @@ const ForgetPassword = () => {
   const navigate = useNavigate()
   const { type } = useSelector((state) => state.modal)
 
-  const handleClose = (e) => {
-    e.preventDefault()
+  const handleClose = () => {
     dispatch(openModal(''))
-    console.log('type in handleCross = ', type)
   }
-  console.log('type = ', type)
 
   const handleClickSignUp = () => {
     dispatch(openModal(''))

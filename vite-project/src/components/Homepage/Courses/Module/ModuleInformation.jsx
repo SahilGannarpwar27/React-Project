@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { addModule, setCurrentModule, setShowModal } from '../../../../Redux/Slice/CoursesSlice.jsx'
+import { addModule, setCurrentModule } from '../../../../Redux/Slice/CoursesSlice.jsx'
 import { IconPack } from '../../../../constants/IconPack.js'
 import { Strings } from '../../../../constants/Strings.js'
+import { useState } from 'react'
+import EditModuleModal from '../EditModuleModal.jsx'
+import DeleteModals from '../../../../common/DeleteModals.jsx'
 
 const ModuleInfo = () => {
+  const [editModal, setEditModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
   const currentCourse = useSelector((state) => state.courses.currentCourse)
   const currentModule = useSelector((state) => state.courses.currentModule)
   const dispatch = useDispatch()
@@ -18,12 +23,13 @@ const ModuleInfo = () => {
 
   //Scenario : handleEdit used to edit Module to currentCourse
   const handleEdit = () => {
-    dispatch(setShowModal('editModule'))
+    setEditModal((prev) => !prev)
   }
 
   //Scenario : handleDelete used to delete Module to currentCourse
   const handleDelete = () => {
-    dispatch(setShowModal('deleteModule'))
+    // dispatch(setShowModal('deleteModule'))
+    setDeleteModal((prev) => !prev)
   }
 
   //Scenario : Onclick setting the module we are using as CurrentModule
@@ -62,6 +68,8 @@ const ModuleInfo = () => {
         <img src={IconPack.addTraining} alt="add-training" className="mr-2" />
         <span>{Strings.add}</span>
       </p>
+      {editModal && <EditModuleModal setEditModal={setEditModal} />}
+      {deleteModal && <DeleteModals setDeleteModal={setDeleteModal} type ='module' /> }
     </div>
   )
 }

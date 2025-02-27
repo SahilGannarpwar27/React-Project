@@ -1,27 +1,24 @@
 import { useEffect, useState } from 'react'
 
 import toast from 'react-hot-toast'
-import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 
+import AuthForm from './AuthForm'
 import ForgetPassword from './ForgetPassword'
 import Background from '../../common/Background'
-import InputField from '../../common/InputField'
-import AuthPasswordField from '../../common/AuthPasswordField'
 
 import { Strings } from '../../constants/Strings'
 import { openModal } from '../../Redux/Slice/ModalSlice'
 import { signInUser } from '../../Redux/Slice/SignInSlice'
 import { ModalStrings } from '../../constants/ModalStrings'
-import { signInInputFields, SignInPasswordFields } from '../../constants/AuthInputFields'
 import { PATH_SIGNUP, PATH_DASHBOARD } from '../../constants/RouteConstants'
-import AuthForm2 from './AuthForm2'
+import { signInInputFields, SignInPasswordFields } from '../../constants/AuthInputFields'
 
 const SignIn = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { type } = useSelector((state) => state.modal)
+  const { type } = useSelector((state) => state?.modal)
   const [isInvalidError, setIsInvalidError] = useState(null)
   const isAuthenticated = useSelector((state) => state?.signIn?.isAuthenticated)
 
@@ -54,7 +51,7 @@ const SignIn = () => {
         <div className="w-full max-w-md p-8 rounded shadow-lg ml-14">
           <h1 className="text-3xl font-bold text-custom-green mb-1">{Strings.signIn}</h1>
           <p className="text-white mb-5">{Strings.adminLogin}</p>
-          <AuthForm2
+          <AuthForm
             inputFields={signInInputFields}
             onSubmit={handleSignIn}
             passwordFields={SignInPasswordFields}
@@ -70,7 +67,7 @@ const SignIn = () => {
                 {Strings.forgotPassword}
               </button>
             </div>
-          </AuthForm2>
+          </AuthForm>
         </div>
         {type !== '' && <ForgetPassword />}
       </Background>

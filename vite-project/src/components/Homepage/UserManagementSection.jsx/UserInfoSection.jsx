@@ -1,10 +1,19 @@
+import ImageUploader from '../../../common/ImageUploader'
 import { IconPack } from '../../../constants/IconPack'
 
 const UserInfoSection = () => {
   return (
     <div className="flex flex-col sm:flex-row items-start gap-4 bg-white rounded-lg shadow-md p-4 md:basis-[40%] min-w-0">
-      <div className="w-24 sm:w-32 aspect-square flex-shrink-0">
-        <img src={IconPack.userImage} alt="User" className="w-full h-full object-contain rounded-full" />
+      <div className="w-24 sm:w-32 aspect-square flex-shrink-0 rounded-full overflow-hidden border border-gray-300">
+        {/* <img src={IconPack.userImage} alt="User" className="w-full h-full object-cover" /> */}
+        <ImageUploader
+          initialImage={IconPack.userImage}
+          onImageChange={(newImageDataUrl) => {
+            // Optional: Do something with the new image URL
+            // For example, you could save it to state or send to your backend
+            console.log(newImageDataUrl)
+          }}
+        />
       </div>
       <div className="w-full min-w-0">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-4">

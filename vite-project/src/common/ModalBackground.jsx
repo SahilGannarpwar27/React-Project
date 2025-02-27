@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import { ModalStrings } from '../constants/ModalStrings'
 
-const ModalBackground = ({ children, show, type, handleFunction }) => {
+const ModalBackground = ({ children, type, handleFunction }) => {
   return (
     <div
-      className={`fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ${show ? '' : 'hidden'} ${type === ModalStrings.signUpEmailSent && 'cursor-pointer'}`}
+      className={`fixed inset-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-50 ${type === ModalStrings.signUpEmailSent && 'cursor-pointer'}`}
       onClick={type === ModalStrings.signUpEmailSent ? handleFunction : undefined}
     >
       <div className="bg-white p-10 rounded-sm w-full max-w-md text-center relative">{children}</div>
@@ -14,13 +14,9 @@ const ModalBackground = ({ children, show, type, handleFunction }) => {
 
 ModalBackground.propTypes = {
   children: PropTypes.node.isRequired,
-  show: PropTypes.bool,
-  type: PropTypes.array,
+  type: PropTypes.string,
   handleFunction: PropTypes.func,
 }
 
-ModalBackground.defaultProps = {
-  show: true,
-}
 
 export default ModalBackground

@@ -1,7 +1,8 @@
-import CoursesInputField from '../../../../common/CoursesInputField'
-import InputFieldSecondary from '../../../../common/InputFieldSecondary'
-import { Strings } from '../../../../constants/Strings'
 import PropTypes from 'prop-types'
+import CourseSelectField from '../../../../common/CourseSelectField'
+import CoursesInputField from '../../../../common/CoursesInputField'
+import { Strings } from '../../../../constants/Strings'
+import { courseCategoryOptions } from '../../../../constants/Options'
 
 const CourseDetailsForm = ({ register, isEditMode }) => {
   return (
@@ -14,44 +15,28 @@ const CourseDetailsForm = ({ register, isEditMode }) => {
           id="Title"
           register={register('title')}
         />
-        {/* <InputFieldSecondary
-          className="w-1/3"
-          htmlFor="Title"
-          value={Strings.title}
-          type="text"
-          id="Title"
-          register={register('title')}
-        /> */}
-        <InputFieldSecondary
+        <CourseSelectField
           className="w-1/3"
           htmlFor="Category"
           value={Strings.category}
-          type="select"
           id="Category"
           register={register('category')}
-        >
-          <option value=""></option>
-          <option value="Training">{Strings.trainings}</option>
-          <option value="Compliance">{Strings.compliance}</option>
-          <option value="Learning">{Strings.learning}</option>
-        </InputFieldSecondary>
-        <InputFieldSecondary
+          options={courseCategoryOptions}
+        />
+        <CourseSelectField
           className="w-1/3"
           htmlFor="Status"
           value={Strings.status}
           type="select"
           id="Status"
           register={register('status')}
-        >
-          <option value=""></option>
-          <option value="Draft">{Strings.draft}</option>
-          <option value="Active" disabled={!isEditMode}>
-            {Strings.active}
-          </option>
-          <option value="Inactive" disabled={!isEditMode}>
-            {Strings.inactive}
-          </option>
-        </InputFieldSecondary>
+          options={[
+            { value: '', label: '' },
+            { value: 'Draft', label: Strings.draft },
+            { value: 'Active', label: Strings.active, disabled: !isEditMode },
+            { value: 'Inactive', label: Strings.inactive, disabled: !isEditMode },
+          ]}
+        />
       </div>
     </form>
   )

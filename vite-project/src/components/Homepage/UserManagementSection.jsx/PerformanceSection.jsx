@@ -56,7 +56,7 @@ const PerformanceSection = () => {
                   <td className="px-4 py-2">{data.noOfAttempts}</td>
                   <td className="px-4 py-2">{data.assignedDate}</td>
                   <td className="px-4 py-2">{data.completedDate}</td>
-                  <td className="px-4 py-2 text-green-600 font-semibold">{data.taskStatus}</td>
+                  <td className="flex justify-center space-x-1 p-1 text-green-900 bg-custom-green rounded-sm font-semibold"><span>{data.taskStatus}</span><img src={IconPack.dropdownIcon} alt="icon" /></td>
                 </tr>
                 {selected === index &&
                   data?.subCourses?.map((course, subIndex) => (
