@@ -12,9 +12,11 @@
     "prepare": "husky && husky install"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.2.2",
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
+    "html2canvas": "^1.4.1",
     "prop-types": "^15.8.1",
     "rc-pagination": "^5.0.0",
     "react": "^18.3.1",
