@@ -26,6 +26,7 @@ const CoursesSlice = createSlice({
     isEditMode: false,
     status: 'idle',
     error: null,
+    showAll: false
   },
   reducers: {
     addCourse: (state, action) => {
@@ -328,6 +329,10 @@ const CoursesSlice = createSlice({
         state.currentCourse.status = 'Active'
       }
     },
+    setShowAll: (state) => {
+      state.showAll = !state.showAll
+    },
+
   },
 
   // extraReducers: (builder) => {
@@ -374,6 +379,7 @@ export const {
   setShowTest,
 
   changeStatus,
+  setShowAll,
 } = CoursesSlice.actions
 
 export default CoursesSlice.reducer
